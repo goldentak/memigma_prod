@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memigma - Verify Code</title>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/verify.css">
+    <script src="../static/js/verify.js" defer></script>
+</head>
+<body>
+    <div class="verify-container fade-in">
+        <h2>Verify Your Account</h2>
+        <p>Enter the 6-digit code sent to your email</p>
+        <form id="verify-form">
+            <div class="code-inputs">
+                <input type="text" class="code-input" maxlength="1" required>
+                <input type="text" class="code-input" maxlength="1" required>
+                <input type="text" class="code-input" maxlength="1" required>
+                <input type="text" class="code-input" maxlength="1" required>
+                <input type="text" class="code-input" maxlength="1" required>
+                <input type="text" class="code-input" maxlength="1" required>
+            </div>
+            <button type="submit" class="btn scale-in" disabled>Verify</button>
+            <div class="error" id="code-error">Invalid code. Please try again.</div>
+            <div class="resend">
+                Didn't receive a code? <a href="#" id="resend-link">Resend</a>
+            </div>
+        </form>
+    </div>
+
+</body>
+</html>

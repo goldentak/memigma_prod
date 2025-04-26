@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memigma - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/reset.css">
+    <link rel="stylesheet" href="../static/css/home.css">
+    <script src="../static/js/home.js" defer></script>
+</head>
+<body>
+    <header class="fade-in">
+        <div class="logo-placeholder">SVG Logo</div>
+        <div class="header-actions">
+            <div class="lang-dropdown">
+                <button class="lang-btn">Language</button>
+                <div class="lang-options">
+                    <button onclick="changeLanguage('en')">English</button>
+                    <button onclick="changeLanguage('ru')">Русский</button>
+                    <button onclick="changeLanguage('kz')">Қазақша</button>
+                </div>
+            </div>
+            <div class="profile-dropdown">
+                <button class="profile-btn">Profile</button>
+                <div class="profile-options">
+                    <button onclick="logout()">Log Out</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="header-divider"></div>
+
+    <div class="main-content">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar fade-in" style="animation-delay: 0.2s;">
+            <button class="sidebar-btn">1</button>
+            <button class="sidebar-btn">2</button>
+            <button class="sidebar-btn">3</button>
+            <button class="sidebar-btn">4</button>
+            <button class="sidebar-btn">5</button>
+            <button class="sidebar-btn">6</button>
+            <button class="sidebar-btn">7</button>
+        </div>
+
+        <!-- Center Content -->
+        <div class="center-content fade-in" style="animation-delay: 0.4s;">
+            <button class="recommend-btn scale-in">View My Recommendations</button>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar fade-in" style="animation-delay: 0.6s;">
+            <div>
+                <h3>My Likes</h3>
+                <div class="grid-placeholder">
+                    <div class="grid-item">Item 1</div>
+                    <div class="grid-item">Item 2</div>
+                    <div class="grid-item">Item 3</div>
+                    <div class="grid-item">Item 4</div>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div>
+                <h3>Recently Viewed</h3>
+                <div class="grid-placeholder">
+                    <div class="grid-item">Item 1</div>
+                    <div class="grid-item">Item 2</div>
+                    <div class="grid-item">Item 3</div>
+                    <div class="grid-item">Item 4</div>
+                </div>
+            </div>
+            <div class="sidebar-divider"></div>
+            <div>
+                <h3>Discovery of the Week</h3>
+                <div class="grid-placeholder">
+                    <div class="grid-item">Item 1</div>
+                    <div class="grid-item">Item 2</div>
+                    <div class="grid-item">Item 3</div>
+                    <div class="grid-item">Item 4</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="fade-in" style="animation-delay: 0.8s;">
+        <h2>Ready to Meme?</h2>
+        <div class="footer-actions">
+            <button class="footer-btn" onclick="sendRequest('/api/contact')">Contact Us</button>
+            <button class="footer-btn" onclick="sendRequest('/api/subscribe')">Subscribe</button>
+        </div>
+        <div class="footer-contact">
+            <p>Email: contact@memigma.com</p>
+            <p>Address: 123 Meme Street, Internet City</p>
+            <p>Phone: +1 (555) 123-4567</p>
+        </div>
+        <div class="footer-social">
+            <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
+            <a href="https://facebook.com/memigma" target="_blank">Facebook</a>
+            <a href="https://youtube.com/memigma" target="_blank">YouTube</a>
+            <a href="https://twitter.com/memigma" target="_blank">Twitter</a>
+        </div>
+    </footer>
+</body>
+</html>

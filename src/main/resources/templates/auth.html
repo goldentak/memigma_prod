@@ -1,0 +1,65 @@
+<!--registration-->
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://ww.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memigma - Auth</title>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{../staticcss/reset.css}" type="text/css" th:href="@{/reset.css}">
+    <link rel="stylesheet" th:href="@{../static/css/auth.css}" type="text/css" th:href="@{/auth.css}">
+    <script defer th:src="@{../static/js/auth.js}"></script>
+</head>
+<body>
+    <div class="auth-container fade-in">
+        <div class="tabs">
+            <div class="tab active scale-in" data-tab="signin">Sign In</div>
+            <div class="tab scale-in" data-tab="signup">Sign Up</div>
+        </div>
+
+        <form method="POST" id="signin-form" action="/auth/login" class="auth-form active" onsubmit="event.preventDefault(); login();">
+            <label for="signin-username">Username</label>
+            <input type="text" id="signin-username" required pattern="^[a-zA-Z0-9_-]+$" title="Username must contain only letters, numbers, dashes, or underscores.">
+            <div class="error" id="signin-username-error">Username must contain only letters, numbers, dashes, or underscores.</div>
+
+            <label for="signin-email">Email</label>
+            <input type="email" id="signin-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address.">
+            <div class="error" id="signin-email-error">Please enter a valid email address.</div>
+
+            <label for="signin-password">Password</label>
+            <input type="password" id="signin-password" required pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
+            <div class="error" id="signin-password-error">Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.</div>
+
+            <div class="options">
+                <label>
+                    <input type="checkbox" id="remember-me"> Remember Me
+                </label>
+                <a href="#">Forgot Password?</a>
+            </div>
+
+            <button type="submit" class="btn scale-in">Sign In</button>
+        </form>
+
+        <form id="signup-form" method="POST" action="/auth/register" class="auth-form">
+            <label for="signup-email">Email</label>
+            <input type="email" id="signup-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address.">
+            <div class="error" id="signup-email-error">Please enter a valid email address.</div>
+
+            <label for="signup-username">Username</label>
+            <input type="text" id="signup-username" required pattern="^[a-zA-Z0-9_-]+$" title="Username must contain only letters, numbers, dashes, or underscores.">
+            <div class="error" id="signup-username-error">Username must contain only letters, numbers, dashes, or underscores.</div>
+            <div class="error" id="username-taken-error">Username is already taken.</div>
+
+            <label for="signup-password">Password</label>
+            <input type="password" id="signup-password" required pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
+            <div class="error" id="signup-password-error">Password must be at least 8 characters long.</div>
+
+            <label for="signup-confirm-password">Confirm Password</label>
+            <input type="password" id="signup-confirm-password" required>
+            <div class="error" id="confirm-password-error">Passwords do not match.</div>
+
+            <button type="submit" class="btn scale-in">Sign Up</button>
+        </form>
+    </div>
+</body>
+</html>
