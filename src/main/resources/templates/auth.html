@@ -1,14 +1,191 @@
-<!--registration-->
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://ww.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memigma - Auth</title>
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" th:href="@{../staticcss/reset.css}" type="text/css" th:href="@{/reset.css}">
-    <link rel="stylesheet" th:href="@{../static/css/auth.css}" type="text/css" th:href="@{/auth.css}">
-    <script defer th:src="@{../static/js/auth.js}"></script>
+    <style>
+        ::selection {
+            background: #C7D64E;
+            color: #000000;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.5s ease-in-out forwards;
+        }
+
+        /* Container */
+        .auth-container {
+            background: #181818;
+            padding: 50px;
+            border: 1px solid #323232;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 550px;
+            margin: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .auth-container:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: #181818;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .tab.active {
+            border-bottom: 2px solid #C7D64E;
+            color: #C7D64E;
+        }
+
+        .tab:hover {
+            color: #C7D64E;
+        }
+
+        /* Forms */
+        .auth-form {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .auth-form.active {
+            display: flex;
+        }
+
+        .auth-form label {
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+        .auth-form input {
+            padding: 12px;
+            background: #000000;
+            border: none;
+            border-radius: 8px;
+            color: #BBBBBB;
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 16px;
+            transition: background 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        }
+
+        .auth-form input:focus {
+            outline: 2px solid #C7D64E;
+            background: #1A1A1A;
+            box-shadow: 0 0 8px rgba(199, 214, 78, 0.5);
+        }
+
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 14px;
+        }
+
+        .options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+        }
+
+        .options a {
+            color: #C7D64E;
+            text-decoration: none;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .options a:hover {
+            color: #FFFFFF;
+        }
+
+        .btn {
+            padding: 18px;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 18px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+        }
+
+        .error {
+            display: none;
+            margin-top: 4px;
+            padding: 6px 10px;
+            background: rgba(255, 85, 85, 0.1);
+            color: #FF5555;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
     <div class="auth-container fade-in">
@@ -19,16 +196,16 @@
 
         <form method="POST" id="signin-form" action="/auth/login" class="auth-form active" onsubmit="event.preventDefault(); login();">
             <label for="signin-username">Username</label>
-            <input type="text" id="signin-username" required pattern="^[a-zA-Z0-9_-]+$" title="Username must contain only letters, numbers, dashes, or underscores.">
+            <input type="text" id="signin-username" required title="Username must contain only letters, numbers, dashes, or underscores.">
             <div class="error" id="signin-username-error">Username must contain only letters, numbers, dashes, or underscores.</div>
 
             <label for="signin-email">Email</label>
-            <input type="email" id="signin-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address.">
+            <input type="email" id="signin-email" required title="Please enter a valid email address.">
             <div class="error" id="signin-email-error">Please enter a valid email address.</div>
 
             <label for="signin-password">Password</label>
-            <input type="password" id="signin-password" required pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
-            <div class="error" id="signin-password-error">Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.</div>
+            <input type="password" id="signin-password" required title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
+            <div class="error" id="signin-password-error Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character."> </div>
 
             <div class="options">
                 <label>
@@ -42,16 +219,16 @@
 
         <form id="signup-form" method="POST" action="/auth/register" class="auth-form">
             <label for="signup-email">Email</label>
-            <input type="email" id="signup-email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address.">
+            <input type="email" id="signup-email" required title="Please enter a valid email address.">
             <div class="error" id="signup-email-error">Please enter a valid email address.</div>
 
             <label for="signup-username">Username</label>
-            <input type="text" id="signup-username" required pattern="^[a-zA-Z0-9_-]+$" title="Username must contain only letters, numbers, dashes, or underscores.">
+            <input type="text" id="signup-username" required title="Username must contain only letters, numbers, dashes, or underscores.">
             <div class="error" id="signup-username-error">Username must contain only letters, numbers, dashes, or underscores.</div>
             <div class="error" id="username-taken-error">Username is already taken.</div>
 
             <label for="signup-password">Password</label>
-            <input type="password" id="signup-password" required pattern="^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$" title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
+            <input type="password" id="signup-password" required title="Password must be at least 8 characters long and contain at least one uppercase letter, one digit, and one special character.">
             <div class="error" id="signup-password-error">Password must be at least 8 characters long.</div>
 
             <label for="signup-confirm-password">Confirm Password</label>
@@ -61,5 +238,208 @@
             <button type="submit" class="btn scale-in">Sign Up</button>
         </form>
     </div>
+    <script>
+        const translations = {
+            en: {
+                signinTab: "Sign In",
+                signupTab: "Sign Up",
+                emailLabel: "Email",
+                usernameLabel: "Username",
+                passwordLabel: "Password",
+                confirmPasswordLabel: "Confirm Password",
+                rememberMe: "Remember Me",
+                forgotPassword: "Forgot Password?",
+                signinButton: "Sign In",
+                signupButton: "Sign Up",
+                emailError: "Please enter a valid email address.",
+                usernameError: "Username must contain only letters, numbers, dashes, or underscores.",
+                passwordError: "Password must be at least 8 characters long.",
+                confirmPasswordError: "Passwords do not match.",
+                usernameTaken: "Username is already taken."
+            },
+            ru: {
+                signinTab: "Войти",
+                signupTab: "Зарегистрироваться",
+                emailLabel: "Электронная почта",
+                usernameLabel: "Имя пользователя",
+                passwordLabel: "Пароль",
+                confirmPasswordLabel: "Подтвердить пароль",
+                rememberMe: "Запомнить меня",
+                forgotPassword: "Забыли пароль?",
+                signinButton: "Войти",
+                signupButton: "Зарегистрироваться",
+                emailError: "Пожалуйста, введите действительный адрес электронной почты.",
+                usernameError: "Имя пользователя должно содержать только буквы, цифры, дефис или подчеркивание.",
+                passwordError: "Пароль должен содержать не менее 8 символов.",
+                confirmPasswordError: "Пароли не совпадают.",
+                usernameTaken: "Это имя пользователя уже занято."
+            },
+            kz: {
+                signinTab: "Кіру",
+                signupTab: "Тіркелу",
+                emailLabel: "Электрондық пошта",
+                usernameLabel: "Пайдаланушы аты",
+                passwordLabel: "Құпиясөз",
+                confirmPasswordLabel: "Құпиясөзді растау",
+                rememberMe: "Мені есте сақтау",
+                forgotPassword: "Құпиясөзді ұмыттыңыз ба?",
+                signinButton: "Кіру",
+                signupButton: "Тіркелу",
+                emailError: "Жарамды электрондық пошта мекенжайын енгізіңіз.",
+                usernameError: "Пайдаланушы аты әріптерден, сандардан және - немесе _ таңбаларынан тұруы керек.",
+                passwordError: "Құпиясөз кемінде 8 таңбадан тұруы керек.",
+                confirmPasswordError: "Құпиясөздер сәйкес келмейді.",
+                usernameTaken: "Бұл пайдаланушы аты бос емес."
+            }
+        };
+
+        let currentLang = 'en';
+
+        // Tab Switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`${tab.dataset.tab}-form`).classList.add('active');
+            });
+        });
+
+        // Validation
+        const usernameRegex = /^[a-zA-Z0-9_-]+$/;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        const passwordMinLength = 8;
+
+        function validateEmail(email, errorElement) {
+            if (!emailRegex.test(email)) {
+                errorElement.style.display = 'block';
+                return false;
+            }
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        function validateUsername(username, errorElement) {
+            if (!usernameRegex.test(username)) {
+                errorElement.style.display = 'block';
+                return false;
+            }
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        function validatePassword(password, errorElement) {
+            if (password.length < passwordMinLength) {
+                errorElement.style.display = 'block';
+                return false;
+            }
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        function validateConfirmPassword(password, confirmPassword, errorElement) {
+            if (password !== confirmPassword) {
+                errorElement.style.display = 'block';
+                return false;
+            }
+            errorElement.style.display = 'none';
+            return true;
+        }
+
+        // Sign In Form Submission
+        document.getElementById('signin-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('signin-username').value;
+            const password = document.getElementById('signin-password').value;
+
+            try {
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (response.ok) {
+                    const res = await response.text();
+                    console.log(res);
+                    window.location.href = '/home';
+                } else {
+                    const errorText = await response.text();
+                    alert('Login failed: ' + errorText);
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                alert('An error occurred during login.');
+            }
+        });
+
+
+        // Sign Up Form Submission
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('signup-email').value;
+            const username = document.getElementById('signup-username').value;
+            const password = document.getElementById('signup-password').value;
+            const confirmPassword = document.getElementById('signup-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                document.getElementById('confirm-password-error').style.display = 'block';
+                return;
+            }
+
+            try {
+                const response = await fetch('/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, username, password })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    localStorage.setItem('regToken', data.token);
+                    window.location.href = `/auth/verify?username=${encodeURIComponent(username)}`;
+                } else {
+                    const errorData = await response.text();
+                    alert('Registration failed: ' + errorData);
+                }
+            } catch (error) {
+                console.error('Registration error:', error);
+                alert('An error occurred during registration.');
+            }
+        });
+
+        // Language Switching
+        function updateLanguage(lang) {
+            currentLang = lang;
+
+            const trySetText = (selector, text) => {
+                const el = document.querySelector(selector);
+                if (el) el.textContent = text;
+            };
+
+            trySetText('.tab[data-tab="signin"]', translations[lang].signinTab);
+            trySetText('.tab[data-tab="signup"]', translations[lang].signupTab);
+            trySetText('#signin-form label[for="signin-username"]', translations[lang].usernameLabel);
+            trySetText('#signin-form label[for="signin-password"]', translations[lang].passwordLabel);
+            trySetText('#signup-form label[for="signup-email"]', translations[lang].emailLabel);
+            trySetText('#signup-form label[for="signup-username"]', translations[lang].usernameLabel);
+            trySetText('#signup-form label[for="signup-password"]', translations[lang].passwordLabel);
+            trySetText('#signup-form label[for="signup-confirm-password"]', translations[lang].confirmPasswordLabel);
+            trySetText('#signin-form .options label', translations[lang].rememberMe);
+            trySetText('#signin-form .options a', translations[lang].forgotPassword);
+            trySetText('#signin-form .btn', translations[lang].signinButton);
+            trySetText('#signup-form .btn', translations[lang].signupButton);
+            trySetText('#signin-username-error', translations[lang].usernameError);
+            trySetText('#signin-password-error', translations[lang].passwordError);
+            trySetText('#signup-email-error', translations[lang].emailError);
+            trySetText('#signup-username-error', translations[lang].usernameError);
+            trySetText('#signup-password-error', translations[lang].passwordError);
+            trySetText('#confirm-password-error', translations[lang].confirmPasswordError);
+            trySetText('#username-taken-error', translations[lang].usernameTaken);
+        }
+
+        // Initialize with English
+        updateLanguage('en');
+    </script>
 </body>
 </html>

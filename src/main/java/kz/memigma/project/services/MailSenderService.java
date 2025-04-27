@@ -44,10 +44,8 @@ public class MailSenderService {
             helper.setTo(to);
             helper.setSubject(subject);
 
-            // 4) Установить HTML-контент
             helper.setText(html, true);
 
-            // 5) Отправить
             mailSender.send(msg);
         } catch (MessagingException e) {
             throw new RuntimeException("Failed to send HTML email", e);

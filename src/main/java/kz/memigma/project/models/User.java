@@ -20,5 +20,4 @@ public class User {
     private boolean enabled = false;
     private Instant createdAt = Instant.now();
 
-    private String registrationCode;
 }

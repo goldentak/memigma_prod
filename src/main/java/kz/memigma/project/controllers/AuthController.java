@@ -79,21 +79,24 @@ public class AuthController {
         model.addAttribute("error", error != null);
         return "verify";
     }
-    @PostMapping(value = "/verify", consumes = "application/json")
+
+    @PostMapping(value = "/verify-code", consumes = "application/json")
     @ResponseBody
     public ResponseEntity<?> doVerifyJson(
-            @RequestBody Map<String,String> body,
+            @RequestBody Map<String, String> body,
             @RequestHeader("Authorization") String authHeader) {
+
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
+
         String token = authHeader.substring(7);
         if (!jwtUtil.validateToken(token)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
 
         String username = jwtUtil.extractUsername(token);
-        String code     = body.get("code");
+        String code = body.get("code");
 
         var p = pendingService.verify(username, code);
         if (p != null) {
@@ -104,11 +107,13 @@ public class AuthController {
             u.setEnabled(true);
             u.setCreatedAt(Instant.now());
             userService.register(u);
-            return ResponseEntity.ok().build();
+
+            String newToken = jwtUtil.generateToken(username);
+            return ResponseEntity.ok(Map.of("token", newToken));
         }
+
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
-
 
     @PostMapping("/login")
     @ResponseBody
