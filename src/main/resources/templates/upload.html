@@ -86,7 +86,7 @@
             gap: 15px;
         }
 
-        .lang-btn, .meme-lang-btn {
+        .lang-btn {
             padding: 8px 16px;
             background: #C7D64E;
             color: #000000;
@@ -114,7 +114,7 @@
             transition: all 0.3s ease-in-out;
         }
 
-        .lang-btn:hover, .profile-btn:hover, .meme-lang-btn:hover {
+        .lang-btn:hover, .profile-btn:hover {
             transform: scale(1.05);
             background: #FFFFFF;
             color: #000000;
@@ -154,11 +154,11 @@
         }
 
         /* Language Dropdown */
-        .lang-dropdown, .meme-lang-dropdown {
+        .lang-dropdown {
             position: relative;
         }
 
-        .lang-options, .meme-lang-options {
+        .lang-options {
             display: none;
             position: absolute;
             top: 35px;
@@ -169,12 +169,9 @@
             flex-direction: column;
             gap: 8px;
             border-radius: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
         }
 
-        .lang-options button, .meme-lang-options button {
+        .lang-options button {
             background: none;
             border: none;
             color: #FFFFFF;
@@ -183,74 +180,10 @@
             cursor: pointer;
             padding: 5px 8px;
             transition: color 0.3s ease-in-out;
-            text-align: left;
         }
 
-        .lang-options button:hover, .meme-lang-options button:hover {
+        .lang-options button:hover {
             color: #C7D64E;
-        }
-
-        /* Meme Type Multi-Select */
-        .meme-type-select {
-            position: relative;
-        }
-
-        .meme-type-btn {
-            padding: 8px 16px;
-            background: #C7D64E;
-            color: #000000;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 14px;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease-in-out;
-            width: 100%;
-            text-align: left;
-        }
-
-        .meme-type-btn:hover {
-            transform: scale(1.05);
-            background: #FFFFFF;
-        }
-
-        .meme-type-options {
-            display: none;
-            position: absolute;
-            top: 35px;
-            left: 0;
-            width: 100%;
-            background: #181818;
-            border: 1px solid #323232;
-            padding: 8px;
-            flex-direction: column;
-            gap: 8px;
-            border-radius: 5px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 1000;
-        }
-
-        .meme-type-options label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #FFFFFF;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 14px;
-            padding: 5px 8px;
-            cursor: pointer;
-        }
-
-        .meme-type-options label:hover {
-            color: #C7D64E;
-        }
-
-        .meme-type-options input[type="checkbox"] {
-            accent-color: #C7D64E;
         }
 
         /* Main Content */
@@ -272,9 +205,6 @@
             border-radius: 10px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             transition: transform 0.3s ease-in-out;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
         }
 
         .container:hover {
@@ -378,45 +308,6 @@
             background: #FFFFFF;
         }
 
-        /* Form Styles */
-        .upload-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .form-group label {
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 14px;
-            color: #FFFFFF;
-        }
-
-        .submit-btn {
-            padding: 15px 0;
-            background: #C7D64E;
-            color: #000000;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 16px;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .submit-btn:hover {
-            transform: scale(1.05);
-            background: #FFFFFF;
-        }
-
         /* Footer */
         footer {
             background: #C7D64E;
@@ -482,17 +373,6 @@
         .footer-social a:hover {
             color: #FFFFFF;
         }
-        .meme-lang-btn,
-        .meme-type-btn {
-            background: #000000;
-            color: #C7D64E;
-            border: 1px solid #C7D64E;
-        }
-        .meme-lang-btn:hover,
-        .meme-type-btn:hover {
-            background: #C7D64E;
-            color: #000000;
-        }
     </style>
 </head>
 <body>
@@ -519,64 +399,18 @@
 
 <div class="main-content fade-in" style="animation-delay: 0.2s;">
     <div class="container">
-        <form id="upload-form" class="upload-form">
-            <div class="form-group">
-                <input type="file" id="file" accept="image/*" hidden>
-                <div class="img-area" data-img="">
-                    <i class='bx bxs-cloud-upload icon'></i>
-                    <h3>Upload Meme</h3>
-                    <p>Image size must be less than <span>2MB</span></p>
-                </div>
-                <button type="button" class="select-image">Select Meme</button>
-            </div>
+        <input type="file" id="file" accept="image/*" hidden>
+        <div class="img-area" data-img="">
+            <i class='bx bxs-cloud-upload icon'></i>
+            <h3>Upload Meme</h3>
+            <p>Image size must be less than <span>2MB</span></p>
+        </div>
+        <button class="select-image" style="border: 1px solid #C7D64E; background: #000; color: #C7D64E; ">Select Meme</button>
+        <input type="text" id="meme-title" placeholder="Enter meme title" style="margin-top: 20px; width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #C7D64E; background: #000; color: #C7D64E; font-family: 'Red Hat Display', sans-serif;">
 
-            <div class="form-group">
-                <label for="meme-language">Meme Language</label>
-                <div class="meme-lang-dropdown">
-                    <button type="button" class="meme-lang-btn">Select Language</button>
-                    <div class="meme-lang-options">
-                        <button type="button" onclick="selectMemeLanguage('English')">English</button>
-                        <button type="button" onclick="selectMemeLanguage('Spanish')">Spanish</button>
-                        <button type="button" onclick="selectMemeLanguage('Mandarin')">Mandarin</button>
-                        <button type="button" onclick="selectMemeLanguage('Hindi')">Hindi</button>
-                        <button type="button" onclick="selectMemeLanguage('Arabic')">Arabic</button>
-                        <button type="button" onclick="selectMemeLanguage('Portuguese')">Portuguese</button>
-                        <button type="button" onclick="selectMemeLanguage('Bengali')">Bengali</button>
-                        <button type="button" onclick="selectMemeLanguage('Russian')">Russian</button>
-                        <button type="button" onclick="selectMemeLanguage('Japanese')">Japanese</button>
-                        <button type="button" onclick="selectMemeLanguage('Punjabi')">Punjabi</button>
-                        <button type="button" onclick="selectMemeLanguage('German')">German</button>
-                        <button type="button" onclick="selectMemeLanguage('French')">French</button>
-                        <button type="button" onclick="selectMemeLanguage('Korean')">Korean</button>
-                        <button type="button" onclick="selectMemeLanguage('Kazakh')">Kazakh</button>
-                        <button type="button" onclick="selectMemeLanguage('Turkish')">Turkish</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="meme-types">Meme Types</label>
-                <div class="meme-type-select">
-                    <button type="button" class="meme-type-btn">Select Types</button>
-                    <div class="meme-type-options">
-                        <label><input type="checkbox" value="Absurd"> Absurd</label>
-                        <label><input type="checkbox" value="Demotivator"> Demotivator</label>
-                        <label><input type="checkbox" value="Irony"> Irony</label>
-                        <label><input type="checkbox" value="Self-Irony"> Self-Irony</label>
-                        <label><input type="checkbox" value="Old-School"> Old-School</label>
-                        <label><input type="checkbox" value="Reaction"> Reaction</label>
-                        <label><input type="checkbox" value="Dark-Humor"> Dark Humor</label>
-                        <label><input type="checkbox" value="Pop-Culture"> Pop Culture</label>
-                        <label><input type="checkbox" value="Political"> Political</label>
-                        <label><input type="checkbox" value="Wholesome"> Wholesome</label>
-                        <label><input type="checkbox" value="cats"> cats</label>
-
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" class="submit-btn">Upload Meme</button>
-        </form>
+        <button type="button" id="submit-btn" class="select-image" style="margin-top:20px;">
+            Upload Meme
+        </button>
     </div>
 </div>
 
@@ -600,6 +434,19 @@
 </footer>
 
 <script>
+    function parseJwt(token) {
+        try {
+            const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+            const json = decodeURIComponent(atob(base64).split('').map(c =>
+                '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+            ).join(''));
+            return JSON.parse(json);
+        } catch {
+            return {};
+        }
+    }
+
+
     const translations = {
         en: {
             language: "Language",
@@ -608,11 +455,6 @@
             upload: "Upload Meme",
             select: "Select Meme",
             sizeLimit: "Image size must be less than <span>2MB</span>",
-            memeLanguage: "Meme Language",
-            memeTypes: "Meme Types",
-            selectLanguage: "Select Language",
-            selectTypes: "Select Types",
-            submit: "Upload Meme",
             footerTitle: "Ready to Meme?",
             contactUs: "Contact Us",
             subscribe: "Subscribe",
@@ -627,11 +469,6 @@
             upload: "Загрузить мем",
             select: "Выбрать мем",
             sizeLimit: "Размер изображения должен быть менее <span>2MB</span>",
-            memeLanguage: "Язык мема",
-            memeTypes: "Типы мемов",
-            selectLanguage: "Выбрать язык",
-            selectTypes: "Выбрать типы",
-            submit: "Загрузить мем",
             footerTitle: "Готовы к мемам?",
             contactUs: "Связаться с нами",
             subscribe: "Подписаться",
@@ -646,11 +483,6 @@
             upload: "Мем жүктеу",
             select: "Мем таңдау",
             sizeLimit: "Сурет өлшемі <span>2MB</span> кем болуы керек",
-            memeLanguage: "Мем тілі",
-            memeTypes: "Мем түрлері",
-            selectLanguage: "Тіл таңдау",
-            selectTypes: "Түрлерді таңдау",
-            submit: "Мем жүктеу",
             footerTitle: "Мемдерге дайынсыз ба?",
             contactUs: "Бізбен байланыс",
             subscribe: "Жазылу",
@@ -661,8 +493,6 @@
     };
 
     let currentLang = 'en';
-    let selectedMemeLanguage = '';
-    let selectedMemeTypes = [];
 
     function changeLanguage(lang) {
         currentLang = lang;
@@ -672,11 +502,6 @@
         document.querySelector('.img-area h3').textContent = translations[lang].upload;
         document.querySelector('.select-image').textContent = translations[lang].select;
         document.querySelector('.img-area p').innerHTML = translations[lang].sizeLimit;
-        document.querySelector('.form-group:nth-child(2) label').textContent = translations[lang].memeLanguage;
-        document.querySelector('.form-group:nth-child(3) label').textContent = translations[lang].memeTypes;
-        document.querySelector('.meme-lang-btn').textContent = selectedMemeLanguage || translations[lang].selectLanguage;
-        document.querySelector('.meme-type-btn').textContent = selectedMemeTypes.length > 0 ? selectedMemeTypes.join(', ') : translations[lang].selectTypes;
-        document.querySelector('.submit-btn').textContent = translations[lang].submit;
         document.querySelector('footer h2').textContent = translations[lang].footerTitle;
         document.querySelectorAll('.footer-btn')[0].textContent = translations[lang].contactUs;
         document.querySelectorAll('.footer-btn')[1].textContent = translations[lang].subscribe;
@@ -685,76 +510,17 @@
         document.querySelectorAll('.footer-contact p')[2].textContent = translations[lang].phone;
     }
 
-    //for form
-    const form            = document.getElementById('upload-form');
-    const fileInput       = document.getElementById('file');
-    const langBtn         = document.querySelector('.meme-lang-btn');
-    const typeBtn         = document.querySelector('.meme-type-btn');
-    let selectedLanguage  = '';
-    let selectedTypes     = [];
 
-    form.addEventListener('submit', async e => {
-        e.preventDefault();
-        if (!fileInput.files[0]) {
-            return alert('Please select an image.');
-        }
-        if (!selectedLanguage) {
-            return alert('Please select a meme language.');
-        }
-        if (selectedTypes.length === 0) {
-            return alert('Please select at least one meme type.');
-        }
-
-        const data = new FormData();
-        data.append('image', fileInput.files[0]);
-        data.append('language', selectedLanguage);
-        selectedTypes.forEach(t => data.append('types[]', t));
-
-        const token = localStorage.getItem('authToken');
-        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
-
-        try {
-            const resp = await fetch('/api/memes', {
-                method: 'POST',
-                headers,
-                body: data
-            });
-            if (!resp.ok) throw new Error('Upload failed');
-            await resp.json();
-            alert('Meme uploaded successfully!');
-            // сброс
-            form.reset();
-            langBtn.textContent = 'Select Language';
-            typeBtn.textContent = 'Select Types';
-            selectedLanguage = '';
-            selectedTypes = [];
-            document.querySelectorAll('.meme-type-options input:checked')
-                .forEach(cb => cb.checked = false);
-        } catch (err) {
-            console.error(err);
-            alert('Error: ' + err.message);
-        }
-    });
-
-
-
-        function sendRequest(endpoint, data, method = 'POST') {
-        return fetch(endpoint, {
-            method: method,
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data)
-        })
-            .then(response => {
-                if (!response.ok) throw new Error('Request failed');
-                return response.json();
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                throw error;
-            });
+    function sendRequest(endpoint) {
+        fetch(endpoint, { method: 'POST' })
+            .then(response => response.json())
+            .then(data => console.log('Request sent:', data))
+            .catch(error => console.error('Error:', error));
     }
 
     function logout() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('username');
         fetch('/api/logout', { method: 'POST' })
             .then(response => {
                 if (response.ok) {
@@ -766,153 +532,145 @@
             .catch(error => console.error('Error:', error));
     }
 
-    function selectMemeLanguage(language) {
-        selectedMemeLanguage = language;
-        document.querySelector('.meme-lang-btn').textContent = language;
-        document.querySelector('.meme-lang-options').style.display = 'none';
+    document.addEventListener('DOMContentLoaded', () => {
+        changeLanguage('en');
+
+        document.querySelector('.lang-btn').addEventListener('click', () => {
+            toggleDropdown('.lang-options');
+        });
+
+        document.querySelector('.profile-btn').addEventListener('click', () => {
+            toggleDropdown('.profile-options');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.lang-dropdown')) closeDropdown('.lang-options');
+            if (!e.target.closest('.profile-dropdown')) closeDropdown('.profile-options');
+        });
+
+        const selectImage = document.querySelector('.select-image');
+        const inputFile = document.querySelector('#file');
+        const imgArea = document.querySelector('.img-area');
+
+        selectImage.addEventListener('click', () => inputFile.click());
+
+        inputFile.addEventListener('change', () => previewImage(inputFile, imgArea));
+
+        imgArea.addEventListener('click', async () => {
+            if (!inputFile.files.length) {
+                alert('Please select an image first.');
+                return;
+            }
+            await uploadMeme(inputFile.files[0]);
+        });
+
+        document.getElementById('submit-btn').addEventListener('click', async () => {
+            const inputFile = document.getElementById('file');
+            const file = inputFile.files[0];
+            if (!file) {
+                alert('Please select an image first.');
+                return;
+            }
+            await uploadMeme(file);
+        });
+    });
+
+    function toggleDropdown(selector) {
+        const dropdown = document.querySelector(selector);
+        dropdown.style.display = dropdown.style.display === 'flex' ? 'none' : 'flex';
     }
 
-    // Dropdown Handling
-    document.querySelector('.lang-btn').addEventListener('click', () => {
-        const options = document.querySelector('.lang-options');
-        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
-    });
+    function closeDropdown(selector) {
+        const dropdown = document.querySelector(selector);
+        dropdown.style.display = 'none';
+    }
 
-    document.querySelector('.profile-btn').addEventListener('click', () => {
-        const options = document.querySelector('.profile-options');
-        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
-    });
+    function previewImage(input, container) {
+        const file = input.files[0];
+        if (!file) return;
 
-    document.querySelector('.meme-lang-btn').addEventListener('click', () => {
-        const options = document.querySelector('.meme-lang-options');
-        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
-    });
-
-    document.querySelector('.meme-type-btn').addEventListener('click', () => {
-        const options = document.querySelector('.meme-type-options');
-        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
-    });
-
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.lang-dropdown')) {
-            document.querySelector('.lang-options').style.display = 'none';
-        }
-        if (!e.target.closest('.profile-dropdown')) {
-            document.querySelector('.profile-options').style.display = 'none';
-        }
-        if (!e.target.closest('.meme-lang-dropdown')) {
-            document.querySelector('.meme-lang-options').style.display = 'none';
-        }
-        if (!e.target.closest('.meme-type-select')) {
-            document.querySelector('.meme-type-options').style.display = 'none';
-        }
-    });
-
-    // Meme Type Selection
-    document.querySelectorAll('.meme-type-options input[type="checkbox"]').forEach(checkbox => {
-        checkbox.addEventListener('change', () => {
-            selectedMemeTypes = Array.from(document.querySelectorAll('.meme-type-options input[type="checkbox"]:checked'))
-                .map(input => input.value);
-            document.querySelector('.meme-type-btn').textContent = selectedMemeTypes.length > 0 ? selectedMemeTypes.join(', ') : translations[currentLang].selectTypes;
-        });
-    });
-
-    // Scroll Animations
-    window.addEventListener('scroll', () => {
-        document.querySelectorAll('.fade-in').forEach(el => {
-            const rect = el.getBoundingClientRect();
-            if (rect.top < window.innerHeight && rect.bottom > 0) {
-                el.style.opacity = '1';
-            }
-        });
-    });
-
-    // Image Upload Functionality
-    const selectImage = document.querySelector('.select-image');
-    const inputFile = document.querySelector('#file');
-    const imgArea = document.querySelector('.img-area');
-
-    selectImage.addEventListener('click', function () {
-        inputFile.click();
-    });
-
-    inputFile.addEventListener('change', function () {
-        const image = this.files[0];
-        if (image.size < 2000000) {
-            const reader = new FileReader();
-            reader.onload = () => {
-                const allImg = imgArea.querySelectorAll('img');
-                allImg.forEach(item => item.remove());
-                const imgUrl = reader.result;
-                const img = document.createElement('img');
-                img.src = imgUrl;
-                imgArea.appendChild(img);
-                imgArea.classList.add('active');
-                imgArea.dataset.img = image.name;
-            };
-            reader.readAsDataURL(image);
-        } else {
-            alert("Image size more than 2MB");
-        }
-    });
-
-    // Form Submission
-    document.querySelector('#upload-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const image = inputFile.files[0];
-
-        if (!image) {
-            alert('Please select an image.');
+        if (file.size > 2 * 1024 * 1024) {
+            alert('Image size exceeds 2MB');
+            input.value = '';
             return;
         }
 
-        if (!selectedMemeLanguage) {
-            alert('Please select a meme language.');
+        const reader = new FileReader();
+        reader.onload = () => {
+            container.innerHTML = '';
+            const img = document.createElement('img');
+            img.src = reader.result;
+            container.appendChild(img);
+            container.classList.add('active');
+            container.dataset.img = file.name;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function uploadMeme(file) {
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('You are not authenticated. Please login first.');
             return;
         }
 
-        if (selectedMemeTypes.length === 0) {
-            alert('Please select at least one meme type.');
+        const payload = parseJwt(token);
+        const username = payload.sub || payload.username;
+        if (!username) {
+            alert('Cannot extract username from token.');
             return;
         }
+
+        const title = document.getElementById('meme-title').value.trim();
+        if (!title) {
+            alert('Please enter a meme title.');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('image', file);
+        formData.append('username', username);
+        formData.append('title', title);
 
         try {
-            // Convert image to base64
-            const reader = new FileReader();
-            reader.readAsDataURL(image);
-            const base64Image = await new Promise((resolve) => {
-                reader.onload = () => resolve(reader.result.split(',')[1]);
+            const response = await fetch('/api/memes', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
             });
 
-            // Create JSON payload
-            const payload = {
-                image: base64Image,
-                filename: image.name,
-                language: selectedMemeLanguage,
-                types: selectedMemeTypes
-            };
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.message || 'Failed to upload meme');
+            }
 
-            // Send to backend
-            const response = await sendRequest('/api/upload-meme', payload);
             alert('Meme uploaded successfully!');
-            // Reset form
-            inputFile.value = '';
-            imgArea.innerHTML = `
-                    <i class='bx bxs-cloud-upload icon'></i>
-                    <h3>${translations[currentLang].upload}</h3>
-                    <p>${translations[currentLang].sizeLimit}</p>
-                `;
-            imgArea.classList.remove('active');
-            imgArea.dataset.img = '';
-            selectedMemeLanguage = '';
-            selectedMemeTypes = [];
-            document.querySelector('.meme-lang-btn').textContent = translations[currentLang].selectLanguage;
-            document.querySelector('.meme-type-btn').textContent = translations[currentLang].selectTypes;
-            document.querySelectorAll('.meme-type-options input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+            resetForm();
         } catch (error) {
-            alert('Failed to upload meme. Please try again.');
+            console.error(error);
+            alert('Error: ' + error.message);
         }
-    });
+    }
+
+    function resetForm() {
+        const inputFile = document.querySelector('#file');
+        const imgArea = document.querySelector('.img-area');
+        const memeTitleInput = document.getElementById('meme-title');
+
+        inputFile.value = '';
+        imgArea.innerHTML = `
+        <i class='bx bxs-cloud-upload icon'></i>
+        <h3>${translations[currentLang].upload}</h3>
+        <p>${translations[currentLang].sizeLimit}</p>
+    `;
+        imgArea.classList.remove('active');
+        imgArea.dataset.img = '';
+        memeTitleInput.value = '';
+    }
+
+
 
     // Initialize Language
     changeLanguage('en');

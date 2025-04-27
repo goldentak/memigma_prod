@@ -34,7 +34,21 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login", "/auth/verify", "/landing", "/auth/verify-code", "/home", "auth/check-username").permitAll()
+                        .requestMatchers("/auth/register", "/auth/login", "/auth/verify", "/landing", "/auth/verify-code", "/home", "auth/check-username", "api/upload").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/index.html",
+                                "/*.css",
+                                "/*.js",
+                                "/assets/**",
+                                "/images/**",
+                                "/favicon.ico"
+                        ).permitAll()
+                        .requestMatchers(
+                                "/api/upload",
+                                "/auth/**"
+                        ).permitAll()
+                        .requestMatchers("/api/memes").permitAll()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(new jakarta.servlet.Filter() {

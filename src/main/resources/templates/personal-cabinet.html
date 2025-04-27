@@ -42,7 +42,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Memigma - Home</title>
+    <title>Memigma - Personal Cabinet</title>
     <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -56,7 +56,6 @@
             color: #FFFFFF;
             font-family: 'Red Hat Display', sans-serif;
             overflow-x: hidden;
-            touch-action: manipulation;
         }
 
         /* Animations */
@@ -68,14 +67,6 @@
         @keyframes scaleIn {
             from { transform: scale(0.95); opacity: 0; }
             to { transform: scale(1); opacity: 1; }
-        }
-
-        @keyframes swipeLeft {
-            to { transform: translateX(-100vw) rotate(-20deg); opacity: 0; }
-        }
-
-        @keyframes swipeRight {
-            to { transform: translateX(100vw) rotate(20deg); opacity: 0; }
         }
 
         .fade-in {
@@ -281,183 +272,105 @@
             flex: 1;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            gap: 20px;
             background: #000000;
             border-radius: 10px;
-            margin-right: 20px;
-            position: relative;
-            overflow: hidden;
+            padding: 20px;
         }
 
-        .meme-card-container {
-            width: 100%;
-            max-width: 360px;
-            height: 640px;
-            position: relative;
-            display: none;
-        }
-
-        .meme-card {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #181818;
-            border: 1px solid #323232;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            touch-action: none;
-            user-select: none;
-            cursor: grab;
-        }
-
-        .meme-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            pointer-events: none;
-        }
-
-        .meme-card.swiping-left {
-            animation: swipeLeft 0.7s ease-in-out forwards;
-        }
-
-        .meme-card.swiping-right {
-            animation: swipeRight 0.7s ease-in-out forwards;
-        }
-
-        .meme-card .overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            font-weight: 700;
-            text-transform: uppercase;
-            opacity: 0;
-            transition: opacity 0.2s;
-        }
-
-        .meme-card.swiping-left .overlay {
-            background: rgba(255, 0, 0, 0.5);
-            color: #FFFFFF;
-            opacity: 1;
-        }
-
-        .meme-card.swiping-right .overlay {
-            background: rgba(199, 214, 78, 0.5);
-            color: #000000;
-            opacity: 1;
-        }
-
-        .recommend-btn {
-            padding: 15px 30px;
-            background: #C7D64E;
-            color: #000000;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 18px;
-            text-transform: uppercase;
-            border: none;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease-in-out;
-        }
-
-        .recommend-btn:hover {
-            transform: scale(1.05);
-            background: #FFFFFF;
-        }
-
-        .swipe-buttons {
-            display: flex;
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .swipe-btn {
-            width: 80px;
-            height: 50px;
-            background: #181818;
-            color: #BBBBBB;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 300;
-            font-size: 16px;
-            border: 1px solid #323232;
-            border-radius: 25px;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-transform: uppercase;
-        }
-
-        .swipe-btn.dislike:hover {
-            background: #FF0000;
-            color: #FFFFFF;
-        }
-
-        .swipe-btn.like:hover {
-            background: #C7D64E;
-            color: #000000;
-        }
-
-        /* Right Sidebar */
-        .right-sidebar {
-            width: 350px;
+        .profile-section {
             background: #181818;
             padding: 20px;
             border: 1px solid #323232;
             border-radius: 10px;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .right-sidebar h3 {
+        .profile-section h2 {
             font-family: 'Red Hat Display', sans-serif;
             font-weight: 400;
-            font-size: 20px;
+            font-size: 24px;
             color: #FFFFFF;
-            margin-bottom: 10px;
         }
 
-        .sidebar-divider {
-            height: 1px;
-            background: #323232;
-            margin: 10px 0;
-        }
-
-        .grid-placeholder {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
+        .profile-info {
+            display: flex;
+            flex-direction: column;
             gap: 10px;
         }
 
-        .grid-item {
-            height: 100px;
-            background: #000000;
-            border: 1px solid #323232;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+        .profile-info p {
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
             color: #BBBBBB;
+        }
+
+        .profile-info p span {
+            color: #C7D64E;
+        }
+
+        .edit-btn {
+            padding: 10px 20px;
+            background: #C7D64E;
+            color: #000000;
             font-family: 'Red Hat Display', sans-serif;
             font-weight: 300;
             font-size: 14px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            align-self: flex-start;
+        }
+
+        .edit-btn:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+        }
+
+        .liked-memes-section {
+            background: #181818;
+            padding: 20px;
+            border: 1px solid #323232;
+            border-radius: 10px;
+        }
+
+        .liked-memes-section h2 {
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 400;
+            font-size: 24px;
+            color: #FFFFFF;
+            margin-bottom: 15px;
+        }
+
+        .meme-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .meme-item {
+            aspect-ratio: 9 / 16;
+            background: #000000;
+            border: 1px solid #323232;
+            border-radius: 8px;
+            overflow: hidden;
             transition: all 0.3s ease-in-out;
         }
 
-        .grid-item:hover {
-            background: #1A1A1A;
-            transform: scale(1.02);
+        .meme-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .meme-item:hover {
+            transform: scale(1.05);
+            border-color: #C7D64E;
         }
 
         /* Footer */
@@ -491,23 +404,6 @@
         .footer-social a:hover {
             color: #FFFFFF;
         }
-
-        .upload-btn {
-            padding: 8px 16px;
-            background: none;
-            border: none;
-            color: #FFFFFF;
-            font-family: 'Red Hat Display', sans-serif;
-            font-weight: 400;
-            font-size: 14px;
-            text-transform: uppercase;
-            cursor: pointer;
-            transition: all 0.3s ease-in-out;
-        }
-        .upload-btn:hover {
-            color: #C7D64E;
-        }
-
     </style>
 </head>
 <body>
@@ -524,13 +420,11 @@
             </div>
             <div class="profile-dropdown">
                 <button class="profile-btn">Profile</button>
-                <button class="upload-btn">Upload Meme</button>
                 <div class="profile-options">
                     <button onclick="goToPersonalCabinet()">Personal Cabinet</button>
                     <button onclick="logout()">Log Out</button>
                 </div>
             </div>
-
         </div>
     </header>
     <div class="header-divider"></div>
@@ -549,51 +443,26 @@
 
         <!-- Center Content -->
         <div class="center-content fade-in" style="animation-delay: 0.4s;">
-            <button class="recommend-btn scale-in" onclick="fetchMemes()">View My Recommendations</button>
-            <div class="meme-card-container" id="meme-card-container">
-                <!-- Meme cards will be dynamically inserted here -->
-            </div>
-            <div class="swipe-buttons">
-                <button class="swipe-btn dislike" onclick="swipeCard('left')">Pass</button>
-                <button class="swipe-btn like" onclick="swipeCard('right')">Like</button>
-            </div>
-        </div>
-
-        <!-- Right Sidebar -->
-        <div class="right-sidebar fade-in" style="animation-delay: 0.6s;">
-            <div>
-                <h3>My Likes</h3>
-                <div class="grid-placeholder">
-                    <div class="grid-item">Item 1</div>
-                    <div class="grid-item">Item 2</div>
-                    <div class="grid-item">Item 3</div>
-                    <div class="grid-item">Item 4</div>
+            <div class="profile-section">
+                <h2>Profile</h2>
+                <div class="profile-info">
+                    <p>Username: <span id="username">Loading...</span></p>
+                    <p>Email: <span id="email">Loading...</span></p>
+                    <p>Preferred Language: <span id="preferred-language">Loading...</span></p>
+                    <p>Favorite Meme Types: <span id="favorite-types">Loading...</span></p>
                 </div>
+                <button class="edit-btn">Edit Profile</button>
             </div>
-            <div class="sidebar-divider"></div>
-            <div>
-                <h3>Recently Viewed</h3>
-                <div class="grid-placeholder">
-                    <div class="grid-item">Item 1</div>
-                    <div class="grid-item">Item 2</div>
-                    <div class="grid-item">Item 3</div>
-                    <div class="grid-item">Item 4</div>
-                </div>
-            </div>
-            <div class="sidebar-divider"></div>
-            <div>
-                <h3>Discovery of the Week</h3>
-                <div class="grid-placeholder">
-                    <div class="grid-item">Item 1</div>
-                    <div class="grid-item">Item 2</div>
-                    <div class="grid-item">Item 3</div>
-                    <div class="grid-item">Item 4</div>
+            <div class="liked-memes-section">
+                <h2>Liked Memes</h2>
+                <div class="meme-grid" id="liked-memes-grid">
+                    <!-- Liked memes will be dynamically inserted here -->
                 </div>
             </div>
         </div>
     </div>
 
-    <footer class="fade-in" style="animation-delay: 0.8s;">
+    <footer class="fade-in" style="animation-delay: 0.6s;">
         <div class="footer-contact">
             <p>Email: contact@memigma.com</p>
         </div>
@@ -612,39 +481,46 @@
                 profile: "Profile",
                 personalCabinet: "Personal Cabinet",
                 logout: "Log Out",
-                recommend: "View My Recommendations",
-                myLikes: "My Likes",
-                recentlyViewed: "Recently Viewed",
-                discoveryWeek: "Discovery of the Week",
-                email: "Email: contact@memigma.com"
+                profileSection: "Profile",
+                username: "Username",
+                email: "Email",
+                preferredLanguage: "Preferred Language",
+                favoriteTypes: "Favorite Meme Types",
+                editProfile: "Edit Profile",
+                likedMemes: "Liked Memes",
+                emailContact: "Email: contact@memigma.com"
             },
             ru: {
                 language: "Язык",
                 profile: "Профиль",
                 personalCabinet: "Личный кабинет",
                 logout: "Выйти",
-                recommend: "Посмотреть мои рекомендации",
-                myLikes: "Мои лайки",
-                recentlyViewed: "Недавно просмотренные",
-                discoveryWeek: "Открытие недели",
-                email: "Email: contact@memigma.com"
+                profileSection: "Профиль",
+                username: "Имя пользователя",
+                email: "Электронная почта",
+                preferredLanguage: "Предпочитаемый язык",
+                favoriteTypes: "Любимые типы мемов",
+                editProfile: "Редактировать профиль",
+                likedMemes: "Понравившиеся мемы",
+                emailContact: "Email: contact@memigma.com"
             },
             kz: {
                 language: "Тіл",
                 profile: "Профиль",
                 personalCabinet: "Жеке кабинет",
                 logout: "Шығу",
-                recommend: "Менің ұсыныстарымды қарау",
-                myLikes: "Менің ұнатқандарым",
-                recentlyViewed: "Жақында қаралған",
-                discoveryWeek: "Аптаның ашылуы",
-                email: "Email: contact@memigma.com"
+                profileSection: "Профиль",
+                username: "Пайдаланушы аты",
+                email: "Электрондық пошта",
+                preferredLanguage: "Таңдаулы тіл",
+                favoriteTypes: "Сүйікті мем түрлері",
+                editProfile: "Профильді өңдеу",
+                likedMemes: "Ұнаған мемдер",
+                emailContact: "Email: contact@memigma.com"
             }
         };
 
         let currentLang = 'en';
-        let memeQueue = [];
-        let isSwiping = false;
 
         function sendRequest(endpoint, data = {}, method = 'POST') {
             return fetch(endpoint, {
@@ -684,11 +560,14 @@
             document.querySelector('.profile-btn').textContent = translations[lang].profile;
             document.querySelectorAll('.profile-options button')[0].textContent = translations[lang].personalCabinet;
             document.querySelectorAll('.profile-options button')[1].textContent = translations[lang].logout;
-            document.querySelector('.recommend-btn').textContent = translations[lang].recommend;
-            document.querySelectorAll('.right-sidebar h3')[0].textContent = translations[lang].myLikes;
-            document.querySelectorAll('.right-sidebar h3')[1].textContent = translations[lang].recentlyViewed;
-            document.querySelectorAll('.right-sidebar h3')[2].textContent = translations[lang].discoveryWeek;
-            document.querySelector('.footer-contact p').textContent = translations[lang].email;
+            document.querySelector('.profile-section h2').textContent = translations[lang].profileSection;
+            document.querySelectorAll('.profile-info p')[0].firstChild.textContent = `${translations[lang].username}: `;
+            document.querySelectorAll('.profile-info p')[1].firstChild.textContent = `${translations[lang].email}: `;
+            document.querySelectorAll('.profile-info p')[2].firstChild.textContent = `${translations[lang].preferredLanguage}: `;
+            document.querySelectorAll('.profile-info p')[3].firstChild.textContent = `${translations[lang].favoriteTypes}: `;
+            document.querySelector('.edit-btn').textContent = translations[lang].editProfile;
+            document.querySelector('.liked-memes-section h2').textContent = translations[lang].likedMemes;
+            document.querySelector('.footer-contact p').textContent = translations[lang].emailContact;
         }
 
         // Dropdown Handling
@@ -721,179 +600,54 @@
             });
         });
 
-        // Meme Card Management
-        async function fetchMemes() {
+        // Fetch User Data and Liked Memes
+        async function fetchUserData() {
             try {
-                const response = await sendRequest('/api/recommend-memes', {}, 'GET');
-                if (response.memes && response.memes.length >= 10) {
-                    memeQueue = response.memes;
-                } else {
-                    // Fallback: Use placeholder memes if fewer than 10 are received
-                    memeQueue = Array(10).fill().map((_, i) => ({
-                        id: `placeholder-${i}`,
-                        url: `https://via.placeholder.com/360x640?text=Meme+${i+1}`,
-                        language: 'English',
-                        types: ['Placeholder']
-                    }));
-                }
-                renderMemeCards();
-                document.querySelector('.recommend-btn').style.display = 'none';
-                document.querySelector('#meme-card-container').style.display = 'block';
-                document.querySelector('.swipe-buttons').style.display = 'flex';
+                const response = await sendRequest('/api/user-profile', {}, 'GET');
+                document.querySelector('#username').textContent = response.username || 'User';
+                document.querySelector('#email').textContent = response.email || 'user@example.com';
+                document.querySelector('#preferred-language').textContent = response.preferredLanguage || 'English';
+                document.querySelector('#favorite-types').textContent = response.favoriteTypes?.join(', ') || 'None';
             } catch (error) {
-                alert('Failed to load memes. Using placeholders.');
-                memeQueue = Array(10).fill().map((_, i) => ({
-                    id: `placeholder-${i}`,
-                    url: `https://via.placeholder.com/360x640?text=Meme+${i+1}`,
-                    language: 'English',
-                    types: ['Placeholder']
-                }));
-                renderMemeCards();
-                document.querySelector('.recommend-btn').style.display = 'none';
-                document.querySelector('#meme-card-container').style.display = 'block';
-                document.querySelector('.swipe-buttons').style.display = 'flex';
+                alert('Failed to load user data.');
+                document.querySelector('#username').textContent = 'User';
+                document.querySelector('#email').textContent = 'user@example.com';
+                document.querySelector('#preferred-language').textContent = 'English';
+                document.querySelector('#favorite-types').textContent = 'None';
             }
         }
 
-        function renderMemeCards() {
-            const container = document.querySelector('#meme-card-container');
-            container.innerHTML = '';
-            memeQueue.slice(0, 3).forEach((meme, index) => {
-                const card = document.createElement('div');
-                card.classList.add('meme-card');
-                card.style.zIndex = 3 - index;
-                card.style.transform = `scale(${1 - index * 0.05}) translateY(${index * 10}px)`;
-                card.innerHTML = `
-                    <img src="${meme.url}" alt="Meme">
-                    <div class="overlay"></div>
-                `;
-                card.dataset.id = meme.id;
-                container.appendChild(card);
-                setupSwipe(card);
-            });
-        }
-
-        function setupSwipe(card) {
-            let startX = 0;
-            let currentX = 0;
-            let isDragging = false;
-
-            card.addEventListener('mousedown', startDrag);
-            card.addEventListener('touchstart', startDrag);
-            card.addEventListener('mousemove', drag);
-            card.addEventListener('touchmove', drag);
-            card.addEventListener('mouseup', endDrag);
-            card.addEventListener('touchend', endDrag);
-
-            function startDrag(e) {
-                if (isSwiping) return;
-                isDragging = true;
-                startX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-                card.style.transition = 'none';
-            }
-
-            function drag(e) {
-                if (!isDragging) return;
-                e.preventDefault();
-                currentX = e.type.includes('mouse') ? e.clientX : e.touches[0].clientX;
-                const deltaX = currentX - startX;
-                const rotate = deltaX * 0.1;
-                card.style.transform = `translateX(${deltaX}px) rotate(${rotate}deg)`;
-
-                if (deltaX < -50) {
-                    card.classList.add('swiping-left');
-                    card.querySelector('.overlay').textContent = 'DISLIKE';
-                } else if (deltaX > 50) {
-                    card.classList.add('swiping-right');
-                    card.querySelector('.overlay').textContent = 'LIKE';
-                } else {
-                    card.classList.remove('swiping-left', 'swiping-right');
-                    card.querySelector('.overlay').textContent = '';
+        async function fetchLikedMemes() {
+            try {
+                const response = await sendRequest('/api/liked-memes', {}, 'GET');
+                const memes = response.memes || [];
+                const grid = document.querySelector('#liked-memes-grid');
+                grid.innerHTML = '';
+                if (memes.length === 0) {
+                    grid.innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">No liked memes yet.</p>';
+                    return;
                 }
-            }
-
-            function endDrag() {
-                if (!isDragging) return;
-                isDragging = false;
-                const deltaX = currentX - startX;
-                card.style.transition = 'transform 0.7s ease-in-out, opacity 0.7s ease-in-out';
-
-                if (deltaX < -75) {
-                    isSwiping = true;
-                    card.classList.add('swiping-left');
-                    handleSwipe(card.dataset.id, 'dislike');
-                    setTimeout(() => {
-                        card.remove();
-                        memeQueue.shift();
-                        if (memeQueue.length < 3) fetchMemes();
-                        else renderMemeCards();
-                        isSwiping = false;
-                    }, 700);
-                } else if (deltaX > 75) {
-                    isSwiping = true;
-                    card.classList.add('swiping-right');
-                    handleSwipe(card.dataset.id, 'like');
-                    setTimeout(() => {
-                        card.remove();
-                        memeQueue.shift();
-                        if (memeQueue.length < 3) fetchMemes();
-                        else renderMemeCards();
-                        isSwiping = false;
-                    }, 700);
-                } else {
-                    card.style.transform = 'translateX(0) rotate(0deg)';
-                    card.classList.remove('swiping-left', 'swiping-right');
-                    card.querySelector('.overlay').textContent = '';
-                }
+                memes.forEach(meme => {
+                    const item = document.createElement('div');
+                    item.classList.add('meme-item');
+                    item.innerHTML = `<img src="${meme.url}" alt="Liked Meme">`;
+                    grid.appendChild(item);
+                });
+            } catch (error) {
+                alert('Failed to load liked memes.');
+                document.querySelector('#liked-memes-grid').innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">No liked memes yet.</p>';
             }
         }
 
-        function swipeCard(direction) {
-            if (isSwiping) return;
-            const card = document.querySelector('.meme-card');
-            if (!card) return;
-            isSwiping = true;
-            card.style.transition = 'transform 0.7s ease-in-out, opacity 0.7s ease-in-out';
-            card.classList.add(`swiping-${direction}`);
-            card.querySelector('.overlay').textContent = direction === 'left' ? 'DISLIKE' : 'LIKE';
-            handleSwipe(card.dataset.id, direction === 'left' ? 'dislike' : 'like');
-            setTimeout(() => {
-                card.remove();
-                memeQueue.shift();
-                if (memeQueue.length < 3) fetchMemes();
-                else renderMemeCards();
-                isSwiping = false;
-            }, 700);
-        }
-
-        function handleSwipe(memeId, action) {
-            sendRequest('/api/meme-action', { memeId, action })
-                .then(() => console.log(`Meme ${memeId} ${action}d`))
-                .catch(error => console.error('Failed to record action:', error));
-
-            // Update right sidebar (placeholder logic)
-            if (action === 'like') {
-                const likesSection = document.querySelector('.right-sidebar div:first-child .grid-placeholder');
-                const newItem = document.createElement('div');
-                newItem.classList.add('grid-item');
-                newItem.textContent = `Meme ${memeId}`;
-                likesSection.prepend(newItem);
-                if (likesSection.children.length > 4) likesSection.removeChild(likesSection-lastChild);
-            }
-        }
-
-        // to upload
-        document.querySelector('.upload-btn').addEventListener('click', () => {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                alert('please log in');
-                return;
-            }
-            window.location.href = `/api/upload?token=${encodeURIComponent(token)}`;
+        // Edit Profile (Placeholder)
+        document.querySelector('.edit-btn').addEventListener('click', () => {
+            alert('Edit profile functionality coming soon!');
         });
 
-        // Initialize Language
+        // Initialize
         changeLanguage('en');
+        fetchUserData();
+        fetchLikedMemes();
     </script>
 </body>
 </html>

@@ -1,7 +1,15 @@
 package kz.memigma.project.controllers;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.io.IOException;
 
 @Controller
 public class MainController {
@@ -19,5 +27,17 @@ public class MainController {
     @GetMapping("/home")
     public String homePage() {
         return "home";
+    }
+    @GetMapping("/api/upload")
+    public String serveUploadPage(
+            @RequestParam("token") String token,
+            HttpServletResponse response) {
+
+        Cookie jwtCookie = new Cookie("AUTH_TOKEN", token);
+        jwtCookie.setHttpOnly(true);
+        jwtCookie.setPath("/");
+        response.addCookie(jwtCookie);
+
+        return "upload";
     }
 }
