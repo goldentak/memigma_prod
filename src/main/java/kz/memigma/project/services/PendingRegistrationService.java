@@ -47,4 +47,18 @@ public class PendingRegistrationService {
         Instant cutoff = Instant.now().minusSeconds(300);
         pendings.entrySet().removeIf(e -> e.getValue().createdAt.isBefore(cutoff));
     }
+
+    public Pending getPending(String username) {
+        return pendings.get(username);
+    }
+
+    public String refreshCode(String username) {
+        Pending p = pendings.get(username);
+        if (p != null) {
+            String newCode = String.format("%06d", random.nextInt(1_000_000));
+            pendings.put(username, new Pending(p.email, p.username, p.password, newCode));
+            return newCode;
+        }
+        throw new RuntimeException("Pending registration not found");
+    }
 }

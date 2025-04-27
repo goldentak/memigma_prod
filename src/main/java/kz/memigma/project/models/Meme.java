@@ -12,7 +12,8 @@ public class Meme {
     private Long id;
     private String title;
     private String imgUrl;
-
+    private String creationDate;
+    private String createdBy;
     //description
     private String language;
     private String type;

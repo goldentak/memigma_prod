@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memigma - Upload Meme</title>
+    <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Display:wght@300;400;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000000;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .fade-in {
+            opacity: 0;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        .scale-in {
+            animation: scaleIn 0.5s ease-in-out forwards;
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(24, 24, 24, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: inset 0 0 100px rgba(50, 50, 50, 0.2);
+        }
+
+        .header-divider {
+            position: fixed;
+            top: 60px;
+            width: 100%;
+            height: 1px;
+            background: #FFFFFF;
+            opacity: 0.2;
+            z-index: 999;
+        }
+
+        .logo-placeholder {
+            width: 120px;
+            height: 40px;
+            background: #181818;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #C7D64E;
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            border: 1px solid #323232;
+            border-radius: 5px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .lang-btn, .meme-lang-btn {
+            padding: 8px 16px;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .profile-btn {
+            padding: 8px 16px;
+            background: transparent;
+            color: #C7D64E;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            border: 1px solid #C7D64E;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .lang-btn:hover, .profile-btn:hover, .meme-lang-btn:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+            color: #000000;
+        }
+
+        /* Profile Dropdown */
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-options {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background: #181818;
+            border: 1px solid #323232;
+            padding: 8px;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 5px;
+        }
+
+        .profile-options button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            cursor: pointer;
+            padding: 5px 8px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .profile-options button:hover {
+            color: #C7D64E;
+        }
+
+        /* Language Dropdown */
+        .lang-dropdown, .meme-lang-dropdown {
+            position: relative;
+        }
+
+        .lang-options, .meme-lang-options {
+            display: none;
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background: #181818;
+            border: 1px solid #323232;
+            padding: 8px;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .lang-options button, .meme-lang-options button {
+            background: none;
+            border: none;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            cursor: pointer;
+            padding: 5px 8px;
+            transition: color 0.3s ease-in-out;
+            text-align: left;
+        }
+
+        .lang-options button:hover, .meme-lang-options button:hover {
+            color: #C7D64E;
+        }
+
+        /* Meme Type Multi-Select */
+        .meme-type-select {
+            position: relative;
+        }
+
+        .meme-type-btn {
+            padding: 8px 16px;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease-in-out;
+            width: 100%;
+            text-align: left;
+        }
+
+        .meme-type-btn:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+        }
+
+        .meme-type-options {
+            display: none;
+            position: absolute;
+            top: 35px;
+            left: 0;
+            width: 100%;
+            background: #181818;
+            border: 1px solid #323232;
+            padding: 8px;
+            flex-direction: column;
+            gap: 8px;
+            border-radius: 5px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 1000;
+        }
+
+        .meme-type-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            padding: 5px 8px;
+            cursor: pointer;
+        }
+
+        .meme-type-options label:hover {
+            color: #C7D64E;
+        }
+
+        .meme-type-options input[type="checkbox"] {
+            accent-color: #C7D64E;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: calc(100vh - 60px);
+            margin-top: 60px;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            width: 100%;
+            background: #181818;
+            padding: 30px;
+            border: 1px solid #323232;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .container:hover {
+            transform: translateY(-5px);
+        }
+
+        .img-area {
+            position: relative;
+            width: 100%;
+            height: 240px;
+            background: #000000;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            border: 1px solid #323232;
+        }
+
+        .img-area .icon {
+            font-size: 80px;
+            color: #BBBBBB;
+        }
+
+        .img-area h3 {
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 18px;
+            font-weight: 400;
+            color: #FFFFFF;
+            margin-bottom: 6px;
+        }
+
+        .img-area p {
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 14px;
+            color: #BBBBBB;
+        }
+
+        .img-area p span {
+            font-weight: 600;
+            color: #C7D64E;
+        }
+
+        .img-area img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            z-index: 100;
+        }
+
+        .img-area::before {
+            content: attr(data-img);
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 400;
+            font-size: 14px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 200;
+        }
+
+        .img-area.active:hover::before {
+            opacity: 1;
+        }
+
+        .select-image {
+            display: block;
+            width: 100%;
+            padding: 15px 0;
+            border-radius: 10px;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .select-image:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+        }
+
+        /* Form Styles */
+        .upload-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            color: #FFFFFF;
+        }
+
+        .submit-btn {
+            padding: 15px 0;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .submit-btn:hover {
+            transform: scale(1.05);
+            background: #FFFFFF;
+        }
+
+        /* Footer */
+        footer {
+            background: #C7D64E;
+            padding: 80px 50px;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+
+        footer h2 {
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 32px;
+            font-weight: 400;
+            text-transform: uppercase;
+        }
+
+        .footer-actions {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-btn {
+            padding: 15px 30px;
+            background: #000000;
+            color: #C7D64E;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            text-transform: uppercase;
+            border: none;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .footer-btn:hover {
+            transform: scale(1.05);
+            background: #181818;
+        }
+
+        .footer-contact {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-social a {
+            color: #000000;
+            font-size: 24px;
+            text-decoration: none;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .footer-social a:hover {
+            color: #FFFFFF;
+        }
+        .meme-lang-btn,
+        .meme-type-btn {
+            background: #000000;
+            color: #C7D64E;
+            border: 1px solid #C7D64E;
+        }
+        .meme-lang-btn:hover,
+        .meme-type-btn:hover {
+            background: #C7D64E;
+            color: #000000;
+        }
+    </style>
+</head>
+<body>
+<header class="fade-in">
+    <div class="logo-placeholder">SVG Logo</div>
+    <div class="header-actions">
+        <div class="lang-dropdown">
+            <button class="lang-btn">Language</button>
+            <div class="lang-options">
+                <button onclick="changeLanguage('en')">English</button>
+                <button onclick="changeLanguage('ru')">Русский</button>
+                <button onclick="changeLanguage('kz')">Қазақша</button>
+            </div>
+        </div>
+        <div class="profile-dropdown">
+            <button class="profile-btn">Profile</button>
+            <div class="profile-options">
+                <button onclick="logout()">Log Out</button>
+            </div>
+        </div>
+    </div>
+</header>
+<div class="header-divider"></div>
+
+<div class="main-content fade-in" style="animation-delay: 0.2s;">
+    <div class="container">
+        <form id="upload-form" class="upload-form">
+            <div class="form-group">
+                <input type="file" id="file" accept="image/*" hidden>
+                <div class="img-area" data-img="">
+                    <i class='bx bxs-cloud-upload icon'></i>
+                    <h3>Upload Meme</h3>
+                    <p>Image size must be less than <span>2MB</span></p>
+                </div>
+                <button type="button" class="select-image">Select Meme</button>
+            </div>
+
+            <div class="form-group">
+                <label for="meme-language">Meme Language</label>
+                <div class="meme-lang-dropdown">
+                    <button type="button" class="meme-lang-btn">Select Language</button>
+                    <div class="meme-lang-options">
+                        <button type="button" onclick="selectMemeLanguage('English')">English</button>
+                        <button type="button" onclick="selectMemeLanguage('Spanish')">Spanish</button>
+                        <button type="button" onclick="selectMemeLanguage('Mandarin')">Mandarin</button>
+                        <button type="button" onclick="selectMemeLanguage('Hindi')">Hindi</button>
+                        <button type="button" onclick="selectMemeLanguage('Arabic')">Arabic</button>
+                        <button type="button" onclick="selectMemeLanguage('Portuguese')">Portuguese</button>
+                        <button type="button" onclick="selectMemeLanguage('Bengali')">Bengali</button>
+                        <button type="button" onclick="selectMemeLanguage('Russian')">Russian</button>
+                        <button type="button" onclick="selectMemeLanguage('Japanese')">Japanese</button>
+                        <button type="button" onclick="selectMemeLanguage('Punjabi')">Punjabi</button>
+                        <button type="button" onclick="selectMemeLanguage('German')">German</button>
+                        <button type="button" onclick="selectMemeLanguage('French')">French</button>
+                        <button type="button" onclick="selectMemeLanguage('Korean')">Korean</button>
+                        <button type="button" onclick="selectMemeLanguage('Kazakh')">Kazakh</button>
+                        <button type="button" onclick="selectMemeLanguage('Turkish')">Turkish</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="meme-types">Meme Types</label>
+                <div class="meme-type-select">
+                    <button type="button" class="meme-type-btn">Select Types</button>
+                    <div class="meme-type-options">
+                        <label><input type="checkbox" value="Absurd"> Absurd</label>
+                        <label><input type="checkbox" value="Demotivator"> Demotivator</label>
+                        <label><input type="checkbox" value="Irony"> Irony</label>
+                        <label><input type="checkbox" value="Self-Irony"> Self-Irony</label>
+                        <label><input type="checkbox" value="Old-School"> Old-School</label>
+                        <label><input type="checkbox" value="Reaction"> Reaction</label>
+                        <label><input type="checkbox" value="Dark-Humor"> Dark Humor</label>
+                        <label><input type="checkbox" value="Pop-Culture"> Pop Culture</label>
+                        <label><input type="checkbox" value="Political"> Political</label>
+                        <label><input type="checkbox" value="Wholesome"> Wholesome</label>
+                        <label><input type="checkbox" value="cats"> cats</label>
+
+                    </div>
+                </div>
+            </div>
+
+            <button type="button" class="submit-btn">Upload Meme</button>
+        </form>
+    </div>
+</div>
+
+<footer class="fade-in" style="animation-delay: 0.4s;">
+    <h2>Ready to Meme?</h2>
+    <div class="footer-actions">
+        <button class="footer-btn" onclick="sendRequest('/api/contact')">Contact Us</button>
+        <button class="footer-btn" onclick="sendRequest('/api/subscribe')">Subscribe</button>
+    </div>
+    <div class="footer-contact">
+        <p>Email: contact@memigma.com</p>
+        <p>Address: 123 Meme Street, Internet City</p>
+        <p>Phone: +1 (555) 123-4567</p>
+    </div>
+    <div class="footer-social">
+        <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
+        <a href="https://facebook.com/memigma" target="_blank">Facebook</a>
+        <a href="https://youtube.com/memigma" target="_blank">YouTube</a>
+        <a href="https://twitter.com/memigma" target="_blank">Twitter</a>
+    </div>
+</footer>
+
+<script>
+    const translations = {
+        en: {
+            language: "Language",
+            profile: "Profile",
+            logout: "Log Out",
+            upload: "Upload Meme",
+            select: "Select Meme",
+            sizeLimit: "Image size must be less than <span>2MB</span>",
+            memeLanguage: "Meme Language",
+            memeTypes: "Meme Types",
+            selectLanguage: "Select Language",
+            selectTypes: "Select Types",
+            submit: "Upload Meme",
+            footerTitle: "Ready to Meme?",
+            contactUs: "Contact Us",
+            subscribe: "Subscribe",
+            email: "Email: contact@memigma.com",
+            address: "Address: 123 Meme Street, Internet City",
+            phone: "Phone: +1 (555) 123-4567"
+        },
+        ru: {
+            language: "Язык",
+            profile: "Профиль",
+            logout: "Выйти",
+            upload: "Загрузить мем",
+            select: "Выбрать мем",
+            sizeLimit: "Размер изображения должен быть менее <span>2MB</span>",
+            memeLanguage: "Язык мема",
+            memeTypes: "Типы мемов",
+            selectLanguage: "Выбрать язык",
+            selectTypes: "Выбрать типы",
+            submit: "Загрузить мем",
+            footerTitle: "Готовы к мемам?",
+            contactUs: "Связаться с нами",
+            subscribe: "Подписаться",
+            email: "Email: contact@memigma.com",
+            address: "Адрес: ул. Мемов, 123, Интернет-Сити",
+            phone: "Телефон: +1 (555) 123-4567"
+        },
+        kz: {
+            language: "Тіл",
+            profile: "Профиль",
+            logout: "Шығу",
+            upload: "Мем жүктеу",
+            select: "Мем таңдау",
+            sizeLimit: "Сурет өлшемі <span>2MB</span> кем болуы керек",
+            memeLanguage: "Мем тілі",
+            memeTypes: "Мем түрлері",
+            selectLanguage: "Тіл таңдау",
+            selectTypes: "Түрлерді таңдау",
+            submit: "Мем жүктеу",
+            footerTitle: "Мемдерге дайынсыз ба?",
+            contactUs: "Бізбен байланыс",
+            subscribe: "Жазылу",
+            email: "Email: contact@memigma.com",
+            address: "Мекенжай: Мемдер көшесі, 123, Интернет қаласы",
+            phone: "Телефон: +1 (555) 123-4567"
+        }
+    };
+
+    let currentLang = 'en';
+    let selectedMemeLanguage = '';
+    let selectedMemeTypes = [];
+
+    function changeLanguage(lang) {
+        currentLang = lang;
+        document.querySelector('.lang-btn').textContent = translations[lang].language;
+        document.querySelector('.profile-btn').textContent = translations[lang].profile;
+        document.querySelector('.profile-options button').textContent = translations[lang].logout;
+        document.querySelector('.img-area h3').textContent = translations[lang].upload;
+        document.querySelector('.select-image').textContent = translations[lang].select;
+        document.querySelector('.img-area p').innerHTML = translations[lang].sizeLimit;
+        document.querySelector('.form-group:nth-child(2) label').textContent = translations[lang].memeLanguage;
+        document.querySelector('.form-group:nth-child(3) label').textContent = translations[lang].memeTypes;
+        document.querySelector('.meme-lang-btn').textContent = selectedMemeLanguage || translations[lang].selectLanguage;
+        document.querySelector('.meme-type-btn').textContent = selectedMemeTypes.length > 0 ? selectedMemeTypes.join(', ') : translations[lang].selectTypes;
+        document.querySelector('.submit-btn').textContent = translations[lang].submit;
+        document.querySelector('footer h2').textContent = translations[lang].footerTitle;
+        document.querySelectorAll('.footer-btn')[0].textContent = translations[lang].contactUs;
+        document.querySelectorAll('.footer-btn')[1].textContent = translations[lang].subscribe;
+        document.querySelectorAll('.footer-contact p')[0].textContent = translations[lang].email;
+        document.querySelectorAll('.footer-contact p')[1].textContent = translations[lang].address;
+        document.querySelectorAll('.footer-contact p')[2].textContent = translations[lang].phone;
+    }
+
+    //for form
+    const form            = document.getElementById('upload-form');
+    const fileInput       = document.getElementById('file');
+    const langBtn         = document.querySelector('.meme-lang-btn');
+    const typeBtn         = document.querySelector('.meme-type-btn');
+    let selectedLanguage  = '';
+    let selectedTypes     = [];
+
+    form.addEventListener('submit', async e => {
+        e.preventDefault();
+        if (!fileInput.files[0]) {
+            return alert('Please select an image.');
+        }
+        if (!selectedLanguage) {
+            return alert('Please select a meme language.');
+        }
+        if (selectedTypes.length === 0) {
+            return alert('Please select at least one meme type.');
+        }
+
+        const data = new FormData();
+        data.append('image', fileInput.files[0]);
+        data.append('language', selectedLanguage);
+        selectedTypes.forEach(t => data.append('types[]', t));
+
+        const token = localStorage.getItem('authToken');
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+
+        try {
+            const resp = await fetch('/api/memes', {
+                method: 'POST',
+                headers,
+                body: data
+            });
+            if (!resp.ok) throw new Error('Upload failed');
+            await resp.json();
+            alert('Meme uploaded successfully!');
+            // сброс
+            form.reset();
+            langBtn.textContent = 'Select Language';
+            typeBtn.textContent = 'Select Types';
+            selectedLanguage = '';
+            selectedTypes = [];
+            document.querySelectorAll('.meme-type-options input:checked')
+                .forEach(cb => cb.checked = false);
+        } catch (err) {
+            console.error(err);
+            alert('Error: ' + err.message);
+        }
+    });
+
+
+
+        function sendRequest(endpoint, data, method = 'POST') {
+        return fetch(endpoint, {
+            method: method,
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(response => {
+                if (!response.ok) throw new Error('Request failed');
+                return response.json();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                throw error;
+            });
+    }
+
+    function logout() {
+        fetch('/api/logout', { method: 'POST' })
+            .then(response => {
+                if (response.ok) {
+                    window.location.href = '/index.html';
+                } else {
+                    console.error('Logout failed');
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+    function selectMemeLanguage(language) {
+        selectedMemeLanguage = language;
+        document.querySelector('.meme-lang-btn').textContent = language;
+        document.querySelector('.meme-lang-options').style.display = 'none';
+    }
+
+    // Dropdown Handling
+    document.querySelector('.lang-btn').addEventListener('click', () => {
+        const options = document.querySelector('.lang-options');
+        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.querySelector('.profile-btn').addEventListener('click', () => {
+        const options = document.querySelector('.profile-options');
+        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.querySelector('.meme-lang-btn').addEventListener('click', () => {
+        const options = document.querySelector('.meme-lang-options');
+        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.querySelector('.meme-type-btn').addEventListener('click', () => {
+        const options = document.querySelector('.meme-type-options');
+        options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.lang-dropdown')) {
+            document.querySelector('.lang-options').style.display = 'none';
+        }
+        if (!e.target.closest('.profile-dropdown')) {
+            document.querySelector('.profile-options').style.display = 'none';
+        }
+        if (!e.target.closest('.meme-lang-dropdown')) {
+            document.querySelector('.meme-lang-options').style.display = 'none';
+        }
+        if (!e.target.closest('.meme-type-select')) {
+            document.querySelector('.meme-type-options').style.display = 'none';
+        }
+    });
+
+    // Meme Type Selection
+    document.querySelectorAll('.meme-type-options input[type="checkbox"]').forEach(checkbox => {
+        checkbox.addEventListener('change', () => {
+            selectedMemeTypes = Array.from(document.querySelectorAll('.meme-type-options input[type="checkbox"]:checked'))
+                .map(input => input.value);
+            document.querySelector('.meme-type-btn').textContent = selectedMemeTypes.length > 0 ? selectedMemeTypes.join(', ') : translations[currentLang].selectTypes;
+        });
+    });
+
+    // Scroll Animations
+    window.addEventListener('scroll', () => {
+        document.querySelectorAll('.fade-in').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                el.style.opacity = '1';
+            }
+        });
+    });
+
+    // Image Upload Functionality
+    const selectImage = document.querySelector('.select-image');
+    const inputFile = document.querySelector('#file');
+    const imgArea = document.querySelector('.img-area');
+
+    selectImage.addEventListener('click', function () {
+        inputFile.click();
+    });
+
+    inputFile.addEventListener('change', function () {
+        const image = this.files[0];
+        if (image.size < 2000000) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const allImg = imgArea.querySelectorAll('img');
+                allImg.forEach(item => item.remove());
+                const imgUrl = reader.result;
+                const img = document.createElement('img');
+                img.src = imgUrl;
+                imgArea.appendChild(img);
+                imgArea.classList.add('active');
+                imgArea.dataset.img = image.name;
+            };
+            reader.readAsDataURL(image);
+        } else {
+            alert("Image size more than 2MB");
+        }
+    });
+
+    // Form Submission
+    document.querySelector('#upload-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const image = inputFile.files[0];
+
+        if (!image) {
+            alert('Please select an image.');
+            return;
+        }
+
+        if (!selectedMemeLanguage) {
+            alert('Please select a meme language.');
+            return;
+        }
+
+        if (selectedMemeTypes.length === 0) {
+            alert('Please select at least one meme type.');
+            return;
+        }
+
+        try {
+            // Convert image to base64
+            const reader = new FileReader();
+            reader.readAsDataURL(image);
+            const base64Image = await new Promise((resolve) => {
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+            });
+
+            // Create JSON payload
+            const payload = {
+                image: base64Image,
+                filename: image.name,
+                language: selectedMemeLanguage,
+                types: selectedMemeTypes
+            };
+
+            // Send to backend
+            const response = await sendRequest('/api/upload-meme', payload);
+            alert('Meme uploaded successfully!');
+            // Reset form
+            inputFile.value = '';
+            imgArea.innerHTML = `
+                    <i class='bx bxs-cloud-upload icon'></i>
+                    <h3>${translations[currentLang].upload}</h3>
+                    <p>${translations[currentLang].sizeLimit}</p>
+                `;
+            imgArea.classList.remove('active');
+            imgArea.dataset.img = '';
+            selectedMemeLanguage = '';
+            selectedMemeTypes = [];
+            document.querySelector('.meme-lang-btn').textContent = translations[currentLang].selectLanguage;
+            document.querySelector('.meme-type-btn').textContent = translations[currentLang].selectTypes;
+            document.querySelectorAll('.meme-type-options input[type="checkbox"]').forEach(checkbox => checkbox.checked = false);
+        } catch (error) {
+            alert('Failed to upload meme. Please try again.');
+        }
+    });
+
+    // Initialize Language
+    changeLanguage('en');
+</script>
+</body>
+</html>

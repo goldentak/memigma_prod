@@ -191,42 +191,34 @@
     </div>
     <script>
         const API_BASE = window.location.origin;
-        const params = new URLSearchParams(window.location.search);
-        const username = params.get('username');
-        let attempts = 0;
 
         async function submitCode(code) {
-            try {
-                const token = localStorage.getItem('regToken');
-                if (!token) throw new Error('Session expired. Please register again.');
+            const token = localStorage.getItem('regToken');
+            if (!token) {
+                alert('Session expired. Please register again.');
+                window.location.href = `${API_BASE}/auth`;
+                return;
+            }
 
-                const resp = await fetch(`${API_BASE}/auth/verify`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${token}`
-                    },
-                    body: JSON.stringify({ code })
-                });
+            const response = await fetch(`${API_BASE}/auth/verify-code`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ code })
+            });
 
-                if (resp.ok) {
-                    const data = await resp.json();
-                    localStorage.setItem('authToken', data.token);
-                    window.location.href = '/dashboard';
-                } else {
-                    const error = await resp.json();
-                    throw new Error(error.message);
-                }
-            } catch (err) {
-                console.error('Verification error:', err);
-                errorElement.textContent = err.message;
-                errorElement.style.display = 'block';
-                if (++attempts >= 3) {
-                    alert('Too many failed attempts. Please register again.');
-                    window.location.href = '/auth';
-                }
+            if (response.ok) {
+                const data = await response.json();
+                localStorage.setItem('authToken', data.token);
+                localStorage.removeItem('regToken');
+                window.location.href = `${API_BASE}/home`;
+            } else {
+                document.getElementById('code-error').style.display = 'block';
             }
         }
+
         async function resendCode() {
             try {
                 const token = localStorage.getItem('regToken');

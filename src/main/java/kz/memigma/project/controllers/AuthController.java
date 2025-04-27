@@ -72,11 +72,7 @@ public class AuthController {
 
 
     @GetMapping("/verify")
-    public String verifyPage(@RequestParam String username,
-                             @RequestParam(required=false) String error,
-                             Model model) {
-        model.addAttribute("username", username);
-        model.addAttribute("error", error != null);
+    public String verifyPage() {
         return "verify";
     }
 
@@ -121,7 +117,7 @@ public class AuthController {
         boolean success = userService.login(userDto.getUsername(), userDto.getPassword());
         if (success) {
             String token = jwtUtil.generateToken(userDto.getUsername());
-            return ResponseEntity.ok("Welcome " + userDto.getUsername() + "! your token is " + token);
+            return ResponseEntity.ok(Map.of("token", token));
         } else {
             return ResponseEntity.badRequest().body("Invalid username or password");
         }
@@ -138,6 +134,40 @@ public class AuthController {
         String username = jwtUtil.extractUsername(token);
         return ResponseEntity.ok("Welcome, " + username + "! This is your profile.");
 
+    }
+
+    @PostMapping("/resend")
+    @ResponseBody
+    public ResponseEntity<?> resendCode(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String token = authHeader.substring(7);
+        if (!jwtUtil.validateToken(token)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
+        String username = jwtUtil.extractUsername(token);
+        PendingRegistrationService.Pending pending = pendingService.getPending(username);
+
+        if (pending == null) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Map.of("error", "No pending registration found"));
+        }
+
+        String newCode = pendingService.refreshCode(username);
+        mailSender.sendHtmlEmail(pending.email, "Your new registration code", newCode);
+
+        return ResponseEntity.ok(Map.of("message", "New code sent successfully"));
+    }
+
+    @GetMapping("/check-username")
+    @ResponseBody
+    public ResponseEntity<?> checkUsernameAvailability(@RequestParam String username) {
+        boolean exists = userService.usernameExists(username);
+        return ResponseEntity.ok().body(Map.of(
+                "available", !exists
+        ));
     }
 
 
