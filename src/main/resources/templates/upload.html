@@ -20,7 +20,6 @@
             overflow-x: hidden;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -40,7 +39,6 @@
             animation: scaleIn 0.5s ease-in-out forwards;
         }
 
-        /* Header */
         header {
             position: fixed;
             top: 0;
@@ -63,21 +61,6 @@
             background: #FFFFFF;
             opacity: 0.2;
             z-index: 999;
-        }
-
-        .logo-placeholder {
-            width: 120px;
-            height: 40px;
-            background: #181818;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #C7D64E;
-            font-family: 'Red Hat Display', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            border: 1px solid #323232;
-            border-radius: 5px;
         }
 
         .header-actions {
@@ -120,7 +103,6 @@
             color: #000000;
         }
 
-        /* Profile Dropdown */
         .profile-dropdown {
             position: relative;
         }
@@ -153,7 +135,6 @@
             color: #C7D64E;
         }
 
-        /* Language Dropdown */
         .lang-dropdown {
             position: relative;
         }
@@ -186,7 +167,6 @@
             color: #C7D64E;
         }
 
-        /* Main Content */
         .main-content {
             display: flex;
             justify-content: center;
@@ -308,7 +288,6 @@
             background: #FFFFFF;
         }
 
-        /* Footer */
         footer {
             background: #C7D64E;
             padding: 80px 50px;
@@ -373,12 +352,30 @@
         .footer-social a:hover {
             color: #FFFFFF;
         }
+        .home-link {
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 14px;
+            text-decoration: none;
+            cursor: pointer;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .home-link:hover {
+            color: #C7D64E;
+        }
+
     </style>
 </head>
 <body>
 <header class="fade-in">
-    <div class="logo-placeholder">SVG Logo</div>
+    <div style=" width: 50px; height: auto;">
+        <img src="https://s3.eu-north-1.amazonaws.com/memigma.system/logo2.svg">
+    </div>
     <div class="header-actions">
+        <a href="/index.html" class="home-link">HOME</a>
+
         <div class="lang-dropdown">
             <button class="lang-btn">Language</button>
             <div class="lang-options">
@@ -393,6 +390,8 @@
                 <button onclick="logout()">Log Out</button>
             </div>
         </div>
+
+
     </div>
 </header>
 <div class="header-divider"></div>
@@ -421,9 +420,7 @@
         <button class="footer-btn" onclick="sendRequest('/api/subscribe')">Subscribe</button>
     </div>
     <div class="footer-contact">
-        <p>Email: contact@memigma.com</p>
-        <p>Address: 123 Meme Street, Internet City</p>
-        <p>Phone: +1 (555) 123-4567</p>
+        <p>Email: contact@memigma.tech</p>
     </div>
     <div class="footer-social">
         <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
@@ -445,6 +442,18 @@
             return {};
         }
     }
+
+    //to home
+    document.querySelector('.home-link').addEventListener('click', (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            alert('Please log in');
+            return;
+        }
+        window.location.href = `/api/home?token=${encodeURIComponent(token)}`;
+    });
+
 
 
     const translations = {
@@ -669,8 +678,6 @@
         imgArea.dataset.img = '';
         memeTitleInput.value = '';
     }
-
-
 
     // Initialize Language
     changeLanguage('en');

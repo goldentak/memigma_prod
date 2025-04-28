@@ -28,7 +28,6 @@
             min-height: 100vh;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -48,7 +47,6 @@
             animation: scaleIn 0.5s ease-in-out forwards;
         }
 
-        /* Container */
         .verify-container {
             background: #181818;
             padding: 50px;
@@ -82,7 +80,6 @@
             margin-bottom: 30px;
         }
 
-        /* Code Inputs */
         .code-inputs {
             display: flex;
             justify-content: center;
@@ -113,7 +110,6 @@
             color: #C7D64E;
         }
 
-        /* Button */
         .btn {
             padding: 18px;
             background: #C7D64E;
@@ -139,7 +135,6 @@
             cursor: not-allowed;
         }
 
-        /* Error */
         .error {
             color: #FF5555;
             font-size: 14px;
@@ -149,7 +144,6 @@
             display: none;
         }
 
-        /* Resend Link */
         .resend {
             margin-top: 20px;
             font-family: 'Red Hat Display', sans-serif;
@@ -265,7 +259,6 @@
 
         let currentLang = 'en';
 
-        // Language Switching
         function updateLanguage(lang) {
             currentLang = lang;
             document.querySelector('h2').textContent = translations[lang].title;

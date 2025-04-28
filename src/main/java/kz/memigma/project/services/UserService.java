@@ -4,14 +4,12 @@ import kz.memigma.project.models.Meme;
 import kz.memigma.project.models.User;
 import kz.memigma.project.repositories.MemeRepository;
 import kz.memigma.project.repositories.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class UserService {
@@ -28,6 +26,8 @@ public class UserService {
         this.memeRepository = memeRepository;
     }
 
+
+
     public User register(User user) {
         user.setEnabled(true);
         user.setCreatedAt(Instant.now());
@@ -40,6 +40,7 @@ public class UserService {
                 .filter(u -> passwordEncoder.matches(rawPassword, u.getPassword()))
                 .isPresent();
     }
+
 
     public List<Meme> getRecommendations(String username) {
         User user = userRepository.findByUsername(username)

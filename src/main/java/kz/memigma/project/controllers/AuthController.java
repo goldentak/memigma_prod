@@ -12,7 +12,6 @@ import kz.memigma.project.services.UserService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -52,7 +51,7 @@ public class AuthController {
     }
     @GetMapping
     public String authPage() {
-        return "auth";   // templates/auth.html
+        return "auth";
     }
 
     @PostMapping(value = "/register", consumes = "application/json", produces = "application/json")

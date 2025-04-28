@@ -12,22 +12,17 @@
                 var firstSheetName = workbook.SheetNames[0];
                 var worksheet = workbook.Sheets[firstSheetName];
 
-                // Convert sheet to JSON to filter blank rows
                 var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                // Filter out blank rows (rows where all cells are empty, null, or undefined)
                 var filteredData = jsonData.filter(row => row.some(filledCell));
 
-                // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
                 var headerRowIndex = filteredData.findIndex((row, index) =>
                   row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
                 );
-                // Fallback
                 if (headerRowIndex === -1 || headerRowIndex > 25) {
                   headerRowIndex = 0;
                 }
 
-                // Convert filtered JSON back to CSV
-                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
                 csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
                 return csv;
             } catch (e) {
@@ -37,7 +32,8 @@
         }
         return gk_fileData[filename] || "";
         }
-        </script><!DOCTYPE html>
+        </script>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -59,7 +55,6 @@
             touch-action: manipulation;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -87,7 +82,6 @@
             animation: scaleIn 0.5s ease-in-out forwards;
         }
 
-        /* Header */
         header {
             position: fixed;
             top: 0;
@@ -112,20 +106,6 @@
             z-index: 999;
         }
 
-        .logo-placeholder {
-            width: 120px;
-            height: 40px;
-            background: #181818;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #C7D64E;
-            font-family: 'Red Hat Display', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            border: 1px solid #323232;
-            border-radius: 5px;
-        }
 
         .header-actions {
             display: flex;
@@ -167,7 +147,6 @@
             color: #000000;
         }
 
-        /* Profile Dropdown */
         .profile-dropdown {
             position: relative;
         }
@@ -200,7 +179,6 @@
             color: #C7D64E;
         }
 
-        /* Language Dropdown */
         .lang-dropdown {
             position: relative;
         }
@@ -233,7 +211,6 @@
             color: #C7D64E;
         }
 
-        /* Main Content */
         .main-content {
             display: flex;
             min-height: calc(100vh - 60px);
@@ -241,7 +218,6 @@
             padding: 20px;
         }
 
-        /* Left Sidebar */
         .left-sidebar {
             width: 70px;
             background: #181818;
@@ -276,7 +252,6 @@
             transform: scale(1.05);
         }
 
-        /* Center Content */
         .center-content {
             flex: 1;
             display: flex;
@@ -429,7 +404,6 @@
             color: #000000;
         }
 
-        /* Right Sidebar */
         .right-sidebar {
             width: 350px;
             background: #181818;
@@ -481,7 +455,6 @@
             transform: scale(1.02);
         }
 
-        /* Footer */
         footer {
             background: #C7D64E;
             padding: 20px 30px;
@@ -529,11 +502,123 @@
             color: #C7D64E;
         }
 
+
+        #ai-chat-container {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 320px;
+            height: 500px;
+            background: #181818;
+            border: 1px solid #323232;
+            border-radius: 15px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.8);
+            overflow: hidden;
+            z-index: 1500;
+            animation: scaleIn 0.4s ease forwards;
+        }
+
+        #ai-chat-header {
+            background: #C7D64E;
+            padding: 12px 16px;
+            font-weight: 700;
+            color: #000;
+            font-size: 16px;
+            font-family: 'Red Hat Display', sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #ai-chat-header button {
+            background: transparent;
+            border: none;
+            color: #000;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        #ai-chat-header button:hover {
+            transform: rotate(90deg);
+        }
+
+        #ai-chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            font-family: 'Red Hat Display', sans-serif;
+            font-size: 14px;
+            color: #FFFFFF;
+            background: #000000;
+        }
+
+        .message {
+            margin-bottom: 12px;
+        }
+
+        .message-user {
+            text-align: right;
+            color: #C7D64E;
+        }
+
+        .message-ai {
+            text-align: left;
+            color: #68C7FF;
+        }
+
+        .message-loading {
+            text-align: left;
+            color: gray;
+            font-style: italic;
+        }
+
+        #ai-chat-input-area {
+            padding: 12px;
+            background: #181818;
+            border-top: 1px solid #323232;
+            display: flex;
+            gap: 8px;
+        }
+
+        #ai-chat-input {
+            flex: 1;
+            padding: 10px;
+            background: #000000;
+            border: 1px solid #323232;
+            border-radius: 10px;
+            color: #FFFFFF;
+            font-family: 'Red Hat Display', sans-serif;
+        }
+
+        #ai-chat-send {
+            padding: 10px 16px;
+            background: #C7D64E;
+            color: #000000;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        #ai-chat-send:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+
     </style>
 </head>
 <body>
     <header class="fade-in">
-        <div class="logo-placeholder">SVG Logo</div>
+        <div style=" width: 50px; height: auto;">
+            <img src="https://s3.eu-north-1.amazonaws.com/memigma.system/logo2.svg">
+        </div>
         <div class="header-actions">
             <div class="lang-dropdown">
                 <button class="lang-btn">Language</button>
@@ -559,20 +644,14 @@
     <div class="main-content">
         <!-- Left Sidebar -->
         <div class="left-sidebar fade-in" style="animation-delay: 0.2s;">
-            <button class="sidebar-btn">1</button>
-            <button class="sidebar-btn">2</button>
-            <button class="sidebar-btn">3</button>
-            <button class="sidebar-btn">4</button>
-            <button class="sidebar-btn">5</button>
-            <button class="sidebar-btn">6</button>
-            <button class="sidebar-btn">7</button>
+            <button class="sidebar-btn" onclick="openAIAgent()">AI Agent</button>
+            <button class="sidebar-btn" onclick="openFindPeople()">Find People</button>
         </div>
 
         <!-- Center Content -->
         <div class="center-content fade-in" style="animation-delay: 0.4s;">
             <button class="recommend-btn scale-in" onclick="fetchMemes()">View My Recommendations</button>
             <div class="meme-card-container" id="meme-card-container">
-                <!-- Meme cards will be dynamically inserted here -->
             </div>
             <div class="swipe-buttons">
                 <button class="swipe-btn dislike" onclick="swipeCard('left')">Pass</button>
@@ -617,7 +696,7 @@
 
     <footer class="fade-in" style="animation-delay: 0.8s;">
         <div class="footer-contact">
-            <p>Email: contact@memigma.com</p>
+            <p>Email: contact@memigma.tech</p>
         </div>
         <div class="footer-social">
             <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
@@ -626,6 +705,18 @@
             <a href="https://twitter.com/memigma" target="_blank">Twitter</a>
         </div>
     </footer>
+
+    <div id="ai-chat-container">
+        <div id="ai-chat-header">
+            AI Chat
+            <button onclick="closeChat()" style="background:none; border:none; font-size:18px; cursor:pointer;">×</button>
+        </div>
+        <div id="ai-chat-messages"></div>
+        <div id="ai-chat-input-area">
+            <input id="ai-chat-input" type="text" placeholder="Type a message...">
+            <button id="ai-chat-send" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 
     <script>
 
@@ -674,32 +765,122 @@
         let memeQueue = [];
         let viewedMemes = [];
 
+
+        function openAIAgent() {
+            document.getElementById('ai-chat-container').style.display = 'flex';
+        }
+
+        function closeChat() {
+            document.getElementById('ai-chat-container').style.display = 'none';
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('ai-chat-input');
+            const message = input.value.trim();
+            if (message === '') return;
+
+            const messagesContainer = document.getElementById('ai-chat-messages');
+
+            appendMessage("You", message, "user");
+
+            input.value = '';
+            scrollChatToBottom();
+
+            const loadingMsg = appendMessage("AI", "Typing...", "loading");
+            scrollChatToBottom();
+
+            try {
+                const token = localStorage.getItem('authToken');
+                const response = await fetch('/api/ai-chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    },
+                    body: JSON.stringify({ prompt: message })
+                });
+
+                if (!response.ok) throw new Error('AI request failed');
+
+                const data = await response.json();
+
+                loadingMsg.remove();
+
+                appendMessage("AI", data.response, "ai");
+                scrollChatToBottom();
+            } catch (error) {
+                console.error('AI error:', error);
+                loadingMsg.remove();
+                appendMessage("AI", "Something went wrong...", "ai");
+                scrollChatToBottom();
+            }
+        }
+
+        function appendMessage(sender, text, type) {
+            const container = document.getElementById('ai-chat-messages');
+            const msg = document.createElement('div');
+            msg.classList.add('message');
+
+            if (type === "user") {
+                msg.classList.add('message-user');
+                msg.innerHTML = `<strong>You:</strong> ${text}`;
+            } else if (type === "ai") {
+                msg.classList.add('message-ai');
+                msg.innerHTML = `<strong>AI:</strong> ${text}`;
+            } else if (type === "loading") {
+                msg.classList.add('message-loading');
+                msg.innerHTML = `AI is typing...`;
+            }
+
+            container.appendChild(msg);
+            return msg;
+        }
+
+
+        function scrollChatToBottom() {
+            const messagesContainer = document.getElementById('ai-chat-messages');
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        // to find people
+        document.querySelector('.sidebar-btn:nth-child(2)').addEventListener('click', () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('Please log in');
+                return;
+            }
+            window.location.href = `/api/find-people-page?token=${encodeURIComponent(token)}`;
+        });
+
+        function favoriteCurrentMeme() {
+            const card = document.querySelector('.meme-card');
+            if (!card) return;
+
+            const memeId = card.dataset.id;
+
+            handleSwipe(memeId, 'favorite');
+        }
+
         async function goToPersonalCabinet() {
             const token = localStorage.getItem('authToken');
             if (!token) {
+                alert('Please log in first.');
                 window.location.href = '/login.html';
                 return;
             }
-
-            try {
-                const response = await fetch('/api/go-to-cabinet', {
-                    method: 'GET',
-                    headers: {
-                        'Authorization': `Bearer ${token}`
-                    }
-                });
-
-                if (response.ok) {
-                    const redirectUrl = await response.text();
-                    window.location.href = redirectUrl;
-                } else {
-                    window.location.href = '/login.html';
-                }
-            } catch (error) {
-                console.error('Error redirecting to cabinet', error);
-                window.location.href = '/login.html';
-            }
+            window.location.href = `/api/personal-cabinet?token=${encodeURIComponent(token)}`;
         }
+
+
+        // to upload
+        document.querySelector('.upload-btn').addEventListener('click', () => {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                alert('please log in');
+                return;
+            }
+            window.location.href = `/api/upload?token=${encodeURIComponent(token)}`;
+        });
 
         async function fetchMemes() {
             try {
@@ -732,6 +913,8 @@
                     return;
                 }
 
+                preloadMemes();
+
                 renderCurrentMeme();
                 document.querySelector('.recommend-btn').style.display = 'none';
                 document.querySelector('#meme-card-container').style.display = 'block';
@@ -742,6 +925,24 @@
             }
         }
 
+        function preloadMemes() {
+            const container = document.querySelector('#meme-card-container');
+
+            for (let i = 1; i <= 2; i++) {
+                if (currentIndex + i < memeQueue.length) {
+                    const meme = memeQueue[currentIndex + i];
+                    const card = document.createElement('div');
+                    card.classList.add('meme-card');
+                    card.style.display = 'none';
+                    card.innerHTML = `
+                <img src="${meme.imgUrl}" alt="Meme">
+                <div class="overlay"></div>
+            `;
+                    card.dataset.id = meme.id;
+                    container.appendChild(card);
+                }
+            }
+        }
         function renderCurrentMeme() {
             const container = document.querySelector('#meme-card-container');
             container.innerHTML = '';
@@ -763,6 +964,7 @@
             container.appendChild(card);
             setupSwipe(card);
         }
+
 
 
         function handleSwipe(memeId, action) {
@@ -814,13 +1016,20 @@
             setTimeout(() => {
                 card.remove();
                 currentIndex++;
-                renderCurrentMeme();
+
+                if (currentIndex < memeQueue.length) {
+                    renderCurrentMeme();
+                } else {
+                    fetchMemes();
+                }
+
                 isSwiping = false;
 
                 const action = direction === 'left' ? 'dislike' : 'like';
                 handleSwipe(memeId, action);
             }, 700);
         }
+
 
 
         function loadSidebar() {
@@ -834,7 +1043,7 @@
                 .then(memes => {
                     const likesSection = document.querySelector('.right-sidebar div:first-child .grid-placeholder');
                     likesSection.innerHTML = '';
-                    memes.reverse().slice(0, 6).forEach(meme => { // REVERSE обязательно
+                    memes.reverse().slice(0, 6).forEach(meme => {
                         const item = document.createElement('div');
                         item.className = 'grid-item';
                         item.innerHTML = `<img src="${meme.imgUrl}" alt="Liked Meme" style="width:100%; height:100%; object-fit:cover;">`;
@@ -892,14 +1101,6 @@
             }
         }
 
-        function favoriteCurrentMeme() {
-            const card = document.querySelector('.meme-card');
-            if (!card) return;
-            const memeId = card.dataset.id;
-            handleSwipe(memeId, 'favorite');
-        }
-
-
         function changeFilter(newFilter) {
             currentFilter = newFilter;
             fetchMemes();
@@ -920,10 +1121,6 @@
                     console.error('Error:', error);
                     throw error;
                 });
-        }
-
-        function goToPersonalCabinet() {
-            window.location.href = '/personal-cabinet.html';
         }
 
         async function logout() {
@@ -961,16 +1158,29 @@
 
         function changeLanguage(lang) {
             currentLang = lang;
-            document.querySelector('.lang-btn').textContent = translations[lang].language;
-            document.querySelector('.profile-btn').textContent = translations[lang].profile;
-            document.querySelectorAll('.profile-options button')[0].textContent = translations[lang].personalCabinet;
-            document.querySelectorAll('.profile-options button')[1].textContent = translations[lang].logout;
-            document.querySelector('.recommend-btn').textContent = translations[lang].recommend;
-            document.querySelectorAll('.right-sidebar h3')[0].textContent = translations[lang].myLikes;
-            document.querySelectorAll('.right-sidebar h3')[1].textContent = translations[lang].recentlyViewed;
-            document.querySelectorAll('.right-sidebar h3')[2].textContent = translations[lang].discoveryWeek;
-            document.querySelector('.footer-contact p').textContent = translations[lang].email;
+
+            const langBtn = document.querySelector('.lang-btn');
+            const profileBtn = document.querySelector('.profile-btn');
+            const profileOptionsButtons = document.querySelectorAll('.profile-options button');
+            const recommendBtn = document.querySelector('.recommend-btn');
+            const rightSidebarTitles = document.querySelectorAll('.right-sidebar h3');
+            const footerEmail = document.querySelector('.footer-contact p');
+
+            if (langBtn) langBtn.textContent = translations[lang].language;
+            if (profileBtn) profileBtn.textContent = translations[lang].profile;
+            if (profileOptionsButtons.length >= 2) {
+                profileOptionsButtons[0].textContent = translations[lang].personalCabinet;
+                profileOptionsButtons[1].textContent = translations[lang].logout;
+            }
+            if (recommendBtn) recommendBtn.textContent = translations[lang].recommend;
+            if (rightSidebarTitles.length >= 3) {
+                rightSidebarTitles[0].textContent = translations[lang].myLikes;
+                rightSidebarTitles[1].textContent = translations[lang].recentlyViewed;
+                rightSidebarTitles[2].textContent = translations[lang].discoveryWeek;
+            }
+            if (footerEmail) footerEmail.textContent = translations[lang].email;
         }
+
 
         // Dropdown Handling
         document.querySelector('.lang-btn').addEventListener('click', () => {
@@ -978,7 +1188,8 @@
             options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
         });
 
-        document.querySelector('.profile-btn').addEventListener('click', () => {
+        document.querySelector('.profile-btn').addEventListener('click', (e) => {
+            e.stopPropagation();
             const options = document.querySelector('.profile-options');
             options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
         });
@@ -1076,18 +1287,6 @@
                 }
             }
         }
-
-
-        // to upload
-        document.querySelector('.upload-btn').addEventListener('click', () => {
-            const token = localStorage.getItem('authToken');
-            if (!token) {
-                alert('please log in');
-                return;
-            }
-            window.location.href = `/api/upload?token=${encodeURIComponent(token)}`;
-        });
-
         // Initialize Language
         changeLanguage('en');
     </script>

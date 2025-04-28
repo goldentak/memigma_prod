@@ -40,12 +40,21 @@ public class SecurityConfig {
                                 "/logout",
                                 "/login",
                                 "/landing",
-                                "/api/go-to-cabinet",
+                                "/api/personal-cabinet",
                                 "/home",
-                                "/", "/index.html",
+                                "/",
+                                "/index.html",
+                                "/home.html",
+                                "/upload.html",
+                                "/personal-cabinet.html",
+                                "/findPeople.html",
+                                "/api/find-people-page",
                                 "/assets/**", "/images/**",
                                 "api/memes",
-                                "api/upload"
+                                "api/upload",
+                                "api/ai-chat",
+                                "/home.html",
+                                "/api/user-profile"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()

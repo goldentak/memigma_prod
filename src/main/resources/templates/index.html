@@ -123,7 +123,6 @@
             color: #000000;
         }
 
-        /* Language Dropdown */
         .lang-dropdown {
             position: relative;
         }
@@ -154,7 +153,6 @@
             color: #C7D64E;
         }
 
-        /* Intro Section */
         .intro {
             height: 100vh;
             display: flex;
@@ -201,7 +199,6 @@
             background: #FFFFFF;
         }
 
-        /* Content Sections */
         .section {
             padding: 100px 50px;
             background: #181818;
@@ -263,7 +260,6 @@
             right: 50px;
         }
 
-        /* Footer */
         footer {
             background: #C7D64E;
             padding: 100px 50px;
@@ -325,7 +321,6 @@
         .footer-social a:hover {
             color: #FFFFFF;
         }
-        /*video*/
         .intro {
             position: relative;
             width: 100vw;
@@ -399,7 +394,7 @@
                 loop
                 playsinline
         ></video>
-        <button class="get-started" onclick="sendRequest('/api/get-started')">GET STARTED</button>
+        <button class="get-started"  onclick="navigateToAuth()">GET STARTED</button>
     </section>
 
     <section class="section section1 fade-in" style="animation-delay: 0.4s;">
@@ -427,9 +422,7 @@
             <button class="footer-btn" onclick="sendRequest('/api/subscribe')">SUBSCRIBE</button>
         </div>
         <div class="footer-contact">
-            <p>Email: contact@memigma.com</p>
-            <p>Address: 123 Meme Street, Internet City</p>
-            <p>Phone: +1 (555) 123-4567</p>
+            <p>Email: contact@memigma.tech</p>
         </div>
         <div class="footer-social">
             <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
@@ -474,22 +467,20 @@
                     var firstSheetName = workbook.SheetNames[0];
                     var worksheet = workbook.Sheets[firstSheetName];
 
-                    // Convert sheet to JSON to filter blank rows
                     var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                    // Filter out blank rows (rows where all cells are empty, null, or undefined)
+
                     var filteredData = jsonData.filter(row => row.some(filledCell));
 
-                    // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
+
                     var headerRowIndex = filteredData.findIndex((row, index) =>
                         row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
                     );
-                    // Fallback
+
                     if (headerRowIndex === -1 || headerRowIndex > 25) {
                         headerRowIndex = 0;
                     }
 
-                    // Convert filtered JSON back to CSV
-                    var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
+                    var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex));
                     csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
                     return csv;
                 } catch (e) {
@@ -582,7 +573,6 @@
             }
         });
 
-        // Trigger animations on scroll
         window.addEventListener('scroll', () => {
             document.querySelectorAll('.fade-in').forEach(el => {
                 const rect = el.getBoundingClientRect();
@@ -600,18 +590,6 @@
                 .catch(error => console.error('Error:', error));
         }
 
-        function navigateToAuth() {
-            fetch('/api/login', { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = 'auth.html';
-                    } else {
-                        console.error('Login request failed');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-
-        };
     </script>
 
 

@@ -19,7 +19,6 @@
             overflow-x: hidden;
         }
 
-        /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -39,7 +38,6 @@
             animation: scaleIn 0.5s ease-in-out forwards;
         }
 
-        /* Header */
         header {
             position: fixed;
             top: 0;
@@ -64,20 +62,6 @@
             z-index: 999;
         }
 
-        .logo-placeholder {
-            width: 120px;
-            height: 40px;
-            background: #181818;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #C7D64E;
-            font-family: 'Red Hat Display', sans-serif;
-            font-size: 12px;
-            font-weight: 700;
-            border: 1px solid #323232;
-            border-radius: 5px;
-        }
 
         .header-actions {
             display: flex;
@@ -119,7 +103,6 @@
             color: #000000;
         }
 
-        /* Profile Dropdown */
         .profile-dropdown {
             position: relative;
         }
@@ -152,7 +135,6 @@
             color: #C7D64E;
         }
 
-        /* Language Dropdown */
         .lang-dropdown {
             position: relative;
         }
@@ -185,7 +167,6 @@
             color: #C7D64E;
         }
 
-        /* Main Content */
         .main-content {
             display: flex;
             min-height: calc(100vh - 60px);
@@ -193,7 +174,6 @@
             padding: 20px;
         }
 
-        /* Left Sidebar */
         .left-sidebar {
             width: 70px;
             background: #181818;
@@ -228,7 +208,6 @@
             transform: scale(1.05);
         }
 
-        /* Center Content */
         .center-content {
             flex: 1;
             display: flex;
@@ -334,7 +313,6 @@
             border-color: #C7D64E;
         }
 
-        /* Footer */
         footer {
             background: #C7D64E;
             padding: 20px 30px;
@@ -369,7 +347,9 @@
 </head>
 <body>
     <header class="fade-in">
-        <div class="logo-placeholder">SVG Logo</div>
+        <div style=" width: 50px; height: auto;">
+            <img src="https://s3.eu-north-1.amazonaws.com/memigma.system/logo2.svg">
+        </div>
         <div class="header-actions">
             <div class="lang-dropdown">
                 <button class="lang-btn">Language</button>
@@ -394,12 +374,6 @@
         <!-- Left Sidebar -->
         <div class="left-sidebar fade-in" style="animation-delay: 0.2s;">
             <button class="sidebar-btn">1</button>
-            <button class="sidebar-btn">2</button>
-            <button class="sidebar-btn">3</button>
-            <button class="sidebar-btn">4</button>
-            <button class="sidebar-btn">5</button>
-            <button class="sidebar-btn">6</button>
-            <button class="sidebar-btn">7</button>
         </div>
 
         <!-- Center Content -->
@@ -409,15 +383,13 @@
                 <div class="profile-info">
                     <p>Username: <span id="username">Loading...</span></p>
                     <p>Email: <span id="email">Loading...</span></p>
-                    <p>Preferred Language: <span id="preferred-language">Loading...</span></p>
-                    <p>Favorite Meme Types: <span id="favorite-types">Loading...</span></p>
                 </div>
                 <button class="edit-btn">Edit Profile</button>
             </div>
             <div class="liked-memes-section">
                 <h2>Liked Memes</h2>
                 <div class="meme-grid" id="liked-memes-grid">
-                    <!-- Liked memes will be dynamically inserted here -->
+
                 </div>
             </div>
         </div>
@@ -425,7 +397,7 @@
 
     <footer class="fade-in" style="animation-delay: 0.6s;">
         <div class="footer-contact">
-            <p>Email: contact@memigma.com</p>
+            <p>Email: contact@memigma.tech</p>
         </div>
         <div class="footer-social">
             <a href="https://instagram.com/memigma" target="_blank">Instagram</a>
@@ -436,6 +408,11 @@
     </footer>
 
     <script>
+        const token = localStorage.getItem('authToken');
+        if (!token) {
+            window.location.href = '/login.html';
+        }
+
         const translations = {
             en: {
                 language: "Language",
@@ -445,9 +422,6 @@
                 profileSection: "Profile",
                 username: "Username",
                 email: "Email",
-                preferredLanguage: "Preferred Language",
-                favoriteTypes: "Favorite Meme Types",
-                editProfile: "Edit Profile",
                 likedMemes: "Liked Memes",
                 emailContact: "Email: contact@memigma.com"
             },
@@ -459,9 +433,6 @@
                 profileSection: "Профиль",
                 username: "Имя пользователя",
                 email: "Электронная почта",
-                preferredLanguage: "Предпочитаемый язык",
-                favoriteTypes: "Любимые типы мемов",
-                editProfile: "Редактировать профиль",
                 likedMemes: "Понравившиеся мемы",
                 emailContact: "Email: contact@memigma.com"
             },
@@ -473,47 +444,12 @@
                 profileSection: "Профиль",
                 username: "Пайдаланушы аты",
                 email: "Электрондық пошта",
-                preferredLanguage: "Таңдаулы тіл",
-                favoriteTypes: "Сүйікті мем түрлері",
-                editProfile: "Профильді өңдеу",
                 likedMemes: "Ұнаған мемдер",
                 emailContact: "Email: contact@memigma.com"
             }
         };
 
         let currentLang = 'en';
-
-        function sendRequest(endpoint, data = {}, method = 'POST') {
-            return fetch(endpoint, {
-                method: method,
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(data)
-            })
-                .then(response => {
-                    if (!response.ok) throw new Error('Request failed');
-                    return response.json();
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    throw error;
-                });
-        }
-
-        function goToPersonalCabinet() {
-            window.location.href = '/personal-cabinet.html';
-        }
-
-        function logout() {
-            fetch('/api/logout', { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/index.html';
-                    } else {
-                        console.error('Logout failed');
-                    }
-                })
-                .catch(error => console.error('Error:', error));
-        }
 
         function changeLanguage(lang) {
             currentLang = lang;
@@ -524,14 +460,10 @@
             document.querySelector('.profile-section h2').textContent = translations[lang].profileSection;
             document.querySelectorAll('.profile-info p')[0].firstChild.textContent = `${translations[lang].username}: `;
             document.querySelectorAll('.profile-info p')[1].firstChild.textContent = `${translations[lang].email}: `;
-            document.querySelectorAll('.profile-info p')[2].firstChild.textContent = `${translations[lang].preferredLanguage}: `;
-            document.querySelectorAll('.profile-info p')[3].firstChild.textContent = `${translations[lang].favoriteTypes}: `;
-            document.querySelector('.edit-btn').textContent = translations[lang].editProfile;
             document.querySelector('.liked-memes-section h2').textContent = translations[lang].likedMemes;
             document.querySelector('.footer-contact p').textContent = translations[lang].emailContact;
         }
 
-        // Dropdown Handling
         document.querySelector('.lang-btn').addEventListener('click', () => {
             const options = document.querySelector('.lang-options');
             options.style.display = options.style.display === 'flex' ? 'none' : 'flex';
@@ -551,7 +483,67 @@
             }
         });
 
-        // Scroll Animations
+        async function sendRequest(endpoint, method = 'GET') {
+            const res = await fetch(endpoint, {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+            if (!res.ok) throw new Error(`Request failed: ${res.status}`);
+            return await res.json();
+        }
+
+        async function fetchUserData() {
+            try {
+                const { username, email } = await sendRequest('/api/user-profile');
+                document.getElementById('username').textContent = username;
+                document.getElementById('email').textContent    = email;
+            } catch (err) {
+                console.error(err);
+                document.getElementById('username').textContent = 'Unknown';
+                document.getElementById('email').textContent    = 'Unknown';
+            }
+        }
+
+        async function fetchLikedMemes() {
+            try {
+                const data = await sendRequest('/api/liked-memes', 'GET');
+                const grid = document.getElementById('liked-memes-grid');
+                grid.innerHTML = '';
+
+                if (!data.memes || data.memes.length === 0) {
+                    grid.innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">No liked memes yet.</p>';
+                    return;
+                }
+
+                data.memes.slice(0, 12).forEach(meme => {
+                    const item = document.createElement('div');
+                    item.className = 'meme-item';
+                    item.innerHTML = `<img src="${meme.url}" alt="Meme">`;
+                    grid.appendChild(item);
+                });
+            } catch (error) {
+                const grid = document.getElementById('liked-memes-grid');
+                grid.innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">Failed to load liked memes.</p>';
+            }
+        }
+
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    localStorage.removeItem('authToken');
+                    window.location.href = '/login.html';
+                })
+                .catch(error => console.error('Logout error:', error));
+        }
+
+        document.querySelector('.edit-btn').addEventListener('click', () => {
+            alert('Profile editing will be available soon.');
+        });
+
+        // Scroll fade animation
         window.addEventListener('scroll', () => {
             document.querySelectorAll('.fade-in').forEach(el => {
                 const rect = el.getBoundingClientRect();
@@ -561,93 +553,11 @@
             });
         });
 
-        // Fetch User Data and Liked Memes
-        async function fetchUserData() {
-            try {
-                const response = await sendRequest('/api/user-profile', {}, 'GET');
-                document.querySelector('#username').textContent = response.username || 'User';
-                document.querySelector('#email').textContent = response.email || 'user@example.com';
-                document.querySelector('#preferred-language').textContent = response.preferredLanguage || 'English';
-                document.querySelector('#favorite-types').textContent = response.favoriteTypes?.join(', ') || 'None';
-            } catch (error) {
-                alert('Failed to load user data.');
-                document.querySelector('#username').textContent = 'User';
-                document.querySelector('#email').textContent = 'user@example.com';
-                document.querySelector('#preferred-language').textContent = 'English';
-                document.querySelector('#favorite-types').textContent = 'None';
-            }
-        }
-
-        async function fetchLikedMemes() {
-            try {
-                const response = await sendRequest('/api/liked-memes', {}, 'GET');
-                const memes = response.memes || [];
-                const grid = document.querySelector('#liked-memes-grid');
-                grid.innerHTML = '';
-                if (memes.length === 0) {
-                    grid.innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">No liked memes yet.</p>';
-                    return;
-                }
-                memes.forEach(meme => {
-                    const item = document.createElement('div');
-                    item.classList.add('meme-item');
-                    item.innerHTML = `<img src="${meme.url}" alt="Liked Meme">`;
-                    grid.appendChild(item);
-                });
-            } catch (error) {
-                alert('Failed to load liked memes.');
-                document.querySelector('#liked-memes-grid').innerHTML = '<p style="color: #BBBBBB; font-size: 16px;">No liked memes yet.</p>';
-            }
-        }
-
-        // Edit Profile (Placeholder)
-        document.querySelector('.edit-btn').addEventListener('click', () => {
-            alert('Edit profile functionality coming soon!');
-        });
-
-        var gk_isXlsx = false;
-        var gk_xlsxFileLookup = {};
-        var gk_fileData = {};
-        function filledCell(cell) {
-            return cell !== '' && cell != null;
-        }
-        function loadFileData(filename) {
-            if (gk_isXlsx && gk_xlsxFileLookup[filename]) {
-                try {
-                    var workbook = XLSX.read(gk_fileData[filename], { type: 'base64' });
-                    var firstSheetName = workbook.SheetNames[0];
-                    var worksheet = workbook.Sheets[firstSheetName];
-
-                    // Convert sheet to JSON to filter blank rows
-                    var jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1, blankrows: false, defval: '' });
-                    // Filter out blank rows (rows where all cells are empty, null, or undefined)
-                    var filteredData = jsonData.filter(row => row.some(filledCell));
-
-                    // Heuristic to find the header row by ignoring rows with fewer filled cells than the next row
-                    var headerRowIndex = filteredData.findIndex((row, index) =>
-                        row.filter(filledCell).length >= filteredData[index + 1]?.filter(filledCell).length
-                    );
-                    // Fallback
-                    if (headerRowIndex === -1 || headerRowIndex > 25) {
-                        headerRowIndex = 0;
-                    }
-
-                    // Convert filtered JSON back to CSV
-                    var csv = XLSX.utils.aoa_to_sheet(filteredData.slice(headerRowIndex)); // Create a new sheet from filtered array of arrays
-                    csv = XLSX.utils.sheet_to_csv(csv, { header: 1 });
-                    return csv;
-                } catch (e) {
-                    console.error(e);
-                    return "";
-                }
-            }
-            return gk_fileData[filename] || "";
-        }
-
-        // Initialize
+        // Init
         changeLanguage('en');
         fetchUserData();
         fetchLikedMemes();
     </script>
+
 </body>
 </html>
