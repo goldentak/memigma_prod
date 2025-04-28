@@ -40,13 +40,17 @@ public class SecurityConfig {
                                 "/logout",
                                 "/login",
                                 "/landing",
+                                "/api/go-to-cabinet",
                                 "/home",
                                 "/", "/index.html",
-                                "/assets/**", "/images/**"
+                                "/assets/**", "/images/**",
+                                "api/memes",
+                                "api/upload"
                         ).permitAll()
                         .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
+
 
                 .addFilterBefore(new jakarta.servlet.Filter() {
                     @Override

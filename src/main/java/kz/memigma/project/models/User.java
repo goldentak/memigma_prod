@@ -33,9 +33,6 @@ public class User {
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt = Instant.now();
 
-    /**
-     * Список просмотренных мемов (ID)
-     */
     @ElementCollection
     @CollectionTable(
             name = "user_viewed_memes",

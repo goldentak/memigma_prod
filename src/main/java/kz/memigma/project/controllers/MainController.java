@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 public class MainController {
@@ -44,5 +45,13 @@ public class MainController {
     @GetMapping("/logout")
     public String logoutPage() {
         return "redirect:/login.html";
+    }
+
+    @GetMapping("/api/go-to-cabinet")
+    public String goToCabinet(Principal principal) {
+        if (principal == null) {
+            throw new RuntimeException("Unauthorized");
+        }
+        return "/personal-cabinet.html";
     }
 }
