@@ -59,4 +59,6 @@ public class User {
     )
     @Column(name = "meme_id", nullable = false)
     private List<Long> favoriteMemes = new ArrayList<>();
+
+
 }

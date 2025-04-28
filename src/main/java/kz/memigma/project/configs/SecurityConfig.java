@@ -34,48 +34,41 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/auth/register", "/auth/login", "/auth/verify", "/landing", "/auth/verify-code", "/home", "auth/check-username", "api/upload").permitAll()
                         .requestMatchers(
-                                "/",
-                                "/index.html",
-                                "/*.css",
-                                "/*.js",
-                                "/assets/**",
-                                "/images/**",
-                                "/favicon.ico"
+                                "/auth/**",
+                                "/api/auth/**",
+                                "/logout",
+                                "/login",
+                                "/landing",
+                                "/home",
+                                "/", "/index.html",
+                                "/assets/**", "/images/**"
                         ).permitAll()
-                        .requestMatchers(
-                                "/api/upload",
-                                "/auth/**"
-                        ).permitAll()
-                        .requestMatchers("/api/memes").permitAll()
+                        .requestMatchers("/api/**").authenticated()
                         .anyRequest().authenticated()
                 )
+
                 .addFilterBefore(new jakarta.servlet.Filter() {
                     @Override
-                    public void doFilter(jakarta.servlet.ServletRequest servletRequest,
-                                         jakarta.servlet.ServletResponse servletResponse,
-                                         jakarta.servlet.FilterChain filterChain) throws IOException, ServletException {
-                        HttpServletRequest request = (HttpServletRequest) servletRequest;
-                        HttpServletResponse response = (HttpServletResponse) servletResponse;
-
-                        String authHeader = request.getHeader("Authorization");
-                        if (authHeader == null) {
-                            authHeader = "";
-                        }
-                        if (!authHeader.isEmpty() && authHeader.startsWith("Bearer ")) {
-                            String token = authHeader.substring(7);
+                    public void doFilter(
+                            jakarta.servlet.ServletRequest req,
+                            jakarta.servlet.ServletResponse res,
+                            jakarta.servlet.FilterChain chain
+                    ) throws IOException, ServletException {
+                        HttpServletRequest  request  = (HttpServletRequest) req;
+                        HttpServletResponse response = (HttpServletResponse) res;
+                        String header = request.getHeader("Authorization");
+                        if (header != null && header.startsWith("Bearer ")) {
+                            String token = header.substring(7);
                             if (jwtUtil.validateToken(token)) {
-                                String username = jwtUtil.extractUsername(token);
+                                String user = jwtUtil.extractUsername(token);
                                 var auth = new UsernamePasswordAuthenticationToken(
-                                        username,
-                                        null,
-                                        List.of(new SimpleGrantedAuthority("USER"))
+                                        user, null, List.of(new SimpleGrantedAuthority("USER"))
                                 );
                                 SecurityContextHolder.getContext().setAuthentication(auth);
                             }
                         }
-                        filterChain.doFilter(servletRequest, servletResponse);
+                        chain.doFilter(req, res);
                     }
                 }, UsernamePasswordAuthenticationFilter.class)
 
@@ -86,8 +79,7 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                 );
-
-        System.out.println("SecurityConfig загружен: публичные эндпойнты настроены.");
+        System.out.println("SecurityConfig загружен: public endpoints are set");
 
         return http.build();
     }

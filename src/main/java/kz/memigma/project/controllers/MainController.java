@@ -40,4 +40,9 @@ public class MainController {
 
         return "upload";
     }
+
+    @GetMapping("/logout")
+    public String logoutPage() {
+        return "redirect:/login.html";
+    }
 }

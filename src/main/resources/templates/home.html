@@ -407,6 +407,27 @@
             background: #C7D64E;
             color: #000000;
         }
+        .swipe-btn.favorite{
+            width: 80px;
+            height: 50px;
+            background: #181818;
+            color: #BBBBBB;
+            font-family: 'Red Hat Display', sans-serif;
+            font-weight: 300;
+            font-size: 16px;
+            border: 1px solid #323232;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-transform: uppercase;
+        }
+        .swipe-btn.favorite:hover {
+            background: #ffffff;
+            color: #000000;
+        }
 
         /* Right Sidebar */
         .right-sidebar {
@@ -556,6 +577,7 @@
             <div class="swipe-buttons">
                 <button class="swipe-btn dislike" onclick="swipeCard('left')">Pass</button>
                 <button class="swipe-btn like" onclick="swipeCard('right')">Like</button>
+                <button class="swipe-btn favorite" onclick="favoriteCurrentMeme()">Favorite</button>
             </div>
         </div>
 
@@ -606,6 +628,10 @@
     </footer>
 
     <script>
+        updateProfileButton();
+
+        let isSwiping = false;
+
         const translations = {
             en: {
                 language: "Language",
@@ -642,9 +668,213 @@
             }
         };
 
-        let currentLang = 'en';
+        let currentFilter = 'date';
+        let currentIndex = 0;
         let memeQueue = [];
-        let isSwiping = false;
+        let viewedMemes = [];
+
+        async function fetchMemes() {
+            try {
+                const token = localStorage.getItem('authToken');
+                if (!token) {
+                    alert('Please log in to view memes.');
+                    return;
+                }
+
+                const response = await fetch(`/api/recommendations?filter=${currentFilter}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                });
+
+                if (!response.ok) {
+                    const text = await response.text();
+                    console.error('Server error:', text);
+                    throw new Error('Failed to load memes');
+                }
+
+                const data = await response.json();
+                memeQueue = data.content.filter(meme => !viewedMemes.includes(meme.id));
+                currentIndex = 0;
+
+                if (memeQueue.length === 0) {
+                    alert('No more memes!');
+                    return;
+                }
+
+                renderCurrentMeme();
+                document.querySelector('.recommend-btn').style.display = 'none';
+                document.querySelector('#meme-card-container').style.display = 'block';
+                document.querySelector('.swipe-buttons').style.display = 'flex';
+            } catch (error) {
+                console.error(error);
+                alert('Failed to load memes.');
+            }
+        }
+
+        function renderCurrentMeme() {
+            const container = document.querySelector('#meme-card-container');
+            container.innerHTML = '';
+
+            if (currentIndex >= memeQueue.length) {
+                fetchMemes();
+                return;
+            }
+
+            const meme = memeQueue[currentIndex];
+
+            const card = document.createElement('div');
+            card.classList.add('meme-card');
+            card.innerHTML = `
+        <img src="${meme.imgUrl}" alt="Meme">
+        <div class="overlay"></div>
+    `;
+            card.dataset.id = meme.id;
+            container.appendChild(card);
+            setupSwipe(card);
+        }
+
+
+        function handleSwipe(memeId, action) {
+            const token = localStorage.getItem('authToken');
+            if (!token) {
+                console.error('No auth token found');
+                return;
+            }
+
+            fetch('/api/meme-action', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ memeId, action })
+            })
+                .then(async response => {
+                    if (!response.ok) {
+                        const errorText = await response.text();
+                        throw new Error('Failed request: ' + errorText);
+                    }
+                    const text = await response.text();
+                    return text ? JSON.parse(text) : {};
+                })
+                .then(() => {
+                    updateRightSidebar(memeId, action);
+                })
+                .catch(error => console.error('Failed to record action:', error))
+                .then(() => {
+                    loadSidebar();
+                })
+        }
+
+        function swipeCard(direction) {
+            if (isSwiping) return;
+            const card = document.querySelector('.meme-card');
+            if (!card) return;
+
+            isSwiping = true;
+            const memeId = card.dataset.id;
+
+            card.style.transition = 'transform 0.7s ease-in-out, opacity 0.7s ease-in-out';
+            card.classList.add(`swiping-${direction}`);
+            card.querySelector('.overlay').textContent = direction === 'left' ? 'DISLIKE' : 'LIKE';
+
+            viewedMemes.push(Number(memeId));
+
+            const action = direction === 'left' ? 'dislike' : 'like';
+            handleSwipe(memeId, action);
+
+            setTimeout(() => {
+                card.remove();
+                currentIndex++;
+                isSwiping = false;
+                renderCurrentMeme();
+            }, 700);
+        }
+
+        function loadSidebar() {
+            const token = localStorage.getItem('authToken');
+            if (!token) return;
+
+            fetch('/api/sidebar/likes', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(response => response.json())
+                .then(memes => {
+                    const likesSection = document.querySelector('.right-sidebar div:first-child .grid-placeholder');
+                    likesSection.innerHTML = '';
+                    memes.slice(0, 6).forEach(meme => {
+                        const item = document.createElement('div');
+                        item.className = 'grid-item';
+                        item.innerHTML = `<img src="${meme.imgUrl}" alt="Liked Meme" style="width:100%; height:100%; object-fit:cover;">`;
+                        likesSection.appendChild(item);
+                    });
+                });
+
+            fetch('/api/sidebar/views', {
+                headers: { 'Authorization': `Bearer ${token}` }
+            })
+                .then(response => response.json())
+                .then(memes => {
+                    const viewedSection = document.querySelector('.right-sidebar div:nth-child(3) .grid-placeholder');
+                    viewedSection.innerHTML = '';
+                    memes.slice(0, 6).forEach(meme => {
+                        const item = document.createElement('div');
+                        item.className = 'grid-item';
+                        item.innerHTML = `<img src="${meme.imgUrl}" alt="Viewed Meme" style="width:100%; height:100%; object-fit:cover;">`;
+                        viewedSection.appendChild(item);
+                    });
+                });
+        }
+
+
+        function updateRightSidebar(memeId, action) {
+            const sidebar = document.querySelector('.right-sidebar');
+            if (!sidebar) return;
+
+            const meme = memeQueue.find(m => m.id == memeId);
+            if (!meme) return;
+
+            if (action === 'like' || action === 'favorite') {
+                const likesSection = sidebar.querySelector('h3:nth-of-type(1) + .grid-placeholder');
+                if (likesSection) {
+                    const item = document.createElement('div');
+                    item.classList.add('grid-item');
+                    item.innerHTML = `<img src="${meme.imgUrl}" alt="Liked Meme" style="width: 100%; height: 100%; object-fit: cover;">`;
+                    likesSection.prepend(item);
+                    if (likesSection.children.length > 6) {
+                        likesSection.removeChild(likesSection.lastChild);
+                    }
+                }
+            }
+
+            const viewedSection = sidebar.querySelector('h3:nth-of-type(2) + .grid-placeholder');
+            if (viewedSection) {
+                const item = document.createElement('div');
+                item.classList.add('grid-item');
+                item.innerHTML = `<img src="${meme.imgUrl}" alt="Viewed Meme" style="width: 100%; height: 100%; object-fit: cover;">`;
+                viewedSection.prepend(item);
+                if (viewedSection.children.length > 6) {
+                    viewedSection.removeChild(viewedSection.lastChild);
+                }
+            }
+        }
+
+        function favoriteCurrentMeme() {
+            const card = document.querySelector('.meme-card');
+            if (!card) return;
+            const memeId = card.dataset.id;
+            handleSwipe(memeId, 'favorite');
+        }
+
+
+        function changeFilter(newFilter) {
+            currentFilter = newFilter;
+            fetchMemes();
+        }
+
 
         function sendRequest(endpoint, data = {}, method = 'POST') {
             return fetch(endpoint, {
@@ -666,18 +896,32 @@
             window.location.href = '/personal-cabinet.html';
         }
 
-        function logout() {
-            fetch('/api/logout', { method: 'POST' })
-                .then(response => {
-                    if (response.ok) {
-                        window.location.href = '/index.html';
-                    } else {
-                        console.error('Logout failed');
+        async function logout() {
+            try {
+                await fetch('/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                });
+            } catch (error) {
+                console.error('Logout request failed', error);
+            } finally {
+                localStorage.removeItem('authToken');
+                window.location.href = '/login.html';
+            }
         }
-
+        function updateProfileButton() {
+            const token = localStorage.getItem('authToken');
+            const profileBtn = document.querySelector('.profile-btn');
+            if (token) {
+                profileBtn.textContent = "Log Out";
+                profileBtn.onclick = logout;
+            } else {
+                profileBtn.textContent = "Log In";
+                profileBtn.onclick = () => window.location.href = "/login.html";
+            }
+        }
         function changeLanguage(lang) {
             currentLang = lang;
             document.querySelector('.lang-btn').textContent = translations[lang].language;
@@ -720,58 +964,6 @@
                 }
             });
         });
-
-        // Meme Card Management
-        async function fetchMemes() {
-            try {
-                const response = await sendRequest('/api/recommend-memes', {}, 'GET');
-                if (response.memes && response.memes.length >= 10) {
-                    memeQueue = response.memes;
-                } else {
-                    // Fallback: Use placeholder memes if fewer than 10 are received
-                    memeQueue = Array(10).fill().map((_, i) => ({
-                        id: `placeholder-${i}`,
-                        url: `https://via.placeholder.com/360x640?text=Meme+${i+1}`,
-                        language: 'English',
-                        types: ['Placeholder']
-                    }));
-                }
-                renderMemeCards();
-                document.querySelector('.recommend-btn').style.display = 'none';
-                document.querySelector('#meme-card-container').style.display = 'block';
-                document.querySelector('.swipe-buttons').style.display = 'flex';
-            } catch (error) {
-                alert('Failed to load memes. Using placeholders.');
-                memeQueue = Array(10).fill().map((_, i) => ({
-                    id: `placeholder-${i}`,
-                    url: `https://via.placeholder.com/360x640?text=Meme+${i+1}`,
-                    language: 'English',
-                    types: ['Placeholder']
-                }));
-                renderMemeCards();
-                document.querySelector('.recommend-btn').style.display = 'none';
-                document.querySelector('#meme-card-container').style.display = 'block';
-                document.querySelector('.swipe-buttons').style.display = 'flex';
-            }
-        }
-
-        function renderMemeCards() {
-            const container = document.querySelector('#meme-card-container');
-            container.innerHTML = '';
-            memeQueue.slice(0, 3).forEach((meme, index) => {
-                const card = document.createElement('div');
-                card.classList.add('meme-card');
-                card.style.zIndex = 3 - index;
-                card.style.transform = `scale(${1 - index * 0.05}) translateY(${index * 10}px)`;
-                card.innerHTML = `
-                    <img src="${meme.url}" alt="Meme">
-                    <div class="overlay"></div>
-                `;
-                card.dataset.id = meme.id;
-                container.appendChild(card);
-                setupSwipe(card);
-            });
-        }
 
         function setupSwipe(card) {
             let startX = 0;
@@ -826,7 +1018,7 @@
                         card.remove();
                         memeQueue.shift();
                         if (memeQueue.length < 3) fetchMemes();
-                        else renderMemeCards();
+                        else renderCurrentMeme();
                         isSwiping = false;
                     }, 700);
                 } else if (deltaX > 75) {
@@ -837,7 +1029,7 @@
                         card.remove();
                         memeQueue.shift();
                         if (memeQueue.length < 3) fetchMemes();
-                        else renderMemeCards();
+                        else renderCurrentMeme();
                         isSwiping = false;
                     }, 700);
                 } else {
@@ -848,39 +1040,6 @@
             }
         }
 
-        function swipeCard(direction) {
-            if (isSwiping) return;
-            const card = document.querySelector('.meme-card');
-            if (!card) return;
-            isSwiping = true;
-            card.style.transition = 'transform 0.7s ease-in-out, opacity 0.7s ease-in-out';
-            card.classList.add(`swiping-${direction}`);
-            card.querySelector('.overlay').textContent = direction === 'left' ? 'DISLIKE' : 'LIKE';
-            handleSwipe(card.dataset.id, direction === 'left' ? 'dislike' : 'like');
-            setTimeout(() => {
-                card.remove();
-                memeQueue.shift();
-                if (memeQueue.length < 3) fetchMemes();
-                else renderMemeCards();
-                isSwiping = false;
-            }, 700);
-        }
-
-        function handleSwipe(memeId, action) {
-            sendRequest('/api/meme-action', { memeId, action })
-                .then(() => console.log(`Meme ${memeId} ${action}d`))
-                .catch(error => console.error('Failed to record action:', error));
-
-            // Update right sidebar (placeholder logic)
-            if (action === 'like') {
-                const likesSection = document.querySelector('.right-sidebar div:first-child .grid-placeholder');
-                const newItem = document.createElement('div');
-                newItem.classList.add('grid-item');
-                newItem.textContent = `Meme ${memeId}`;
-                likesSection.prepend(newItem);
-                if (likesSection.children.length > 4) likesSection.removeChild(likesSection-lastChild);
-            }
-        }
 
         // to upload
         document.querySelector('.upload-btn').addEventListener('click', () => {

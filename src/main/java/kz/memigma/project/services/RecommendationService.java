@@ -19,7 +19,8 @@ public class RecommendationService {
     private final UserRepository userRepository;
     private final MemeRepository memeRepository;
 
-    public Page<Meme> getRecommendations(String username, String filter, int page, int size) {
+    public Page<Meme> getRecommendations(
+            String username, String filter, int page, int size) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
 
@@ -29,7 +30,6 @@ public class RecommendationService {
             case "date" -> Sort.by(Sort.Direction.DESC, "creationDate");
             default -> Sort.by(Sort.Direction.DESC, "creationDate");
         };
-
         var pageable = PageRequest.of(page, size, sort);
         if (viewed.isEmpty()) {
             return memeRepository.findAll(pageable);
