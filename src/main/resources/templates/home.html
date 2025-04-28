@@ -719,6 +719,10 @@
     </div>
 
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8080'
+            : 'https://memigma-production.up.railway.app/';
+
 
         updateProfileDropdown();
         loadSidebar();
@@ -791,7 +795,7 @@
 
             try {
                 const token = localStorage.getItem('authToken');
-                const response = await fetch('/api/ai-chat', {
+                const response = await fetch('${API_BASE_URL}/api/ai-chat', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -849,7 +853,7 @@
                 alert('Please log in');
                 return;
             }
-            window.location.href = `/api/find-people-page?token=${encodeURIComponent(token)}`;
+            window.location.href = `${API_BASE_URL}/api/find-people-page?token=${encodeURIComponent(token)}`;
         });
 
         function favoriteCurrentMeme() {
@@ -868,7 +872,7 @@
                 window.location.href = '/login.html';
                 return;
             }
-            window.location.href = `/api/personal-cabinet?token=${encodeURIComponent(token)}`;
+            window.location.href = `${API_BASE_URL}/api/personal-cabinet?token=${encodeURIComponent(token)}`;
         }
 
 
@@ -879,7 +883,7 @@
                 alert('please log in');
                 return;
             }
-            window.location.href = `/api/upload?token=${encodeURIComponent(token)}`;
+            window.location.href = `${API_BASE_URL}/api/upload?token=${encodeURIComponent(token)}`;
         });
 
         async function fetchMemes() {
@@ -890,7 +894,7 @@
                     return;
                 }
 
-                const response = await fetch(`/api/recommendations?filter=${currentFilter}`, {
+                const response = await fetch(`${API_BASE_URL}/api/recommendations?filter=${currentFilter}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -974,7 +978,7 @@
                 return;
             }
 
-            fetch('/api/meme-action', {
+            fetch('${API_BASE_URL}/api/meme-action', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -1036,7 +1040,7 @@
             const token = localStorage.getItem('authToken');
             if (!token) return;
 
-            fetch('/api/sidebar/likes', {
+            fetch('${API_BASE_URL}/api/sidebar/likes', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
                 .then(response => response.json())
@@ -1051,7 +1055,7 @@
                     });
                 });
 
-            fetch('/api/sidebar/views', {
+            fetch('${API_BASE_URL}/api/sidebar/views', {
                 headers: { 'Authorization': `Bearer ${token}` }
             })
                 .then(response => response.json())

@@ -316,6 +316,10 @@
     </footer>
 
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8080'
+            : 'https://memigma-production.up.railway.app/';
+
         (function() {
             const params = new URLSearchParams(window.location.search);
             const token = params.get('token');
@@ -369,7 +373,7 @@
             }
             currentPage = page;
             try {
-                const res = await fetch(`/api/find-people?page=${page}&size=${pageSize}`, {
+                const res = await fetch(`${API_BASE_URL}/api/find-people?page=${page}&size=${pageSize}`, {
                     headers: { 'Authorization': `Bearer ${token}` }
                 });
                 console.log(res);
@@ -512,7 +516,7 @@
                 alert('please log in');
                 return;
             }
-            window.location.href = `/api/upload?token=${encodeURIComponent(token)}`;
+            window.location.href = `${API_BASE_URL}/api/upload?token=${encodeURIComponent(token)}`;
         }
 
         async function goToPersonalCabinet() {
@@ -522,12 +526,12 @@
                 window.location.href = '/login.html';
                 return;
             }
-            window.location.href = `/api/personal-cabinet?token=${encodeURIComponent(token)}`;
+            window.location.href = `${API_BASE_URL}/api/personal-cabinet?token=${encodeURIComponent(token)}`;
         }
 
 
         function logout() {
-            fetch('/api/logout', { method: 'POST' })
+            fetch('${API_BASE_URL}/api/logout', { method: 'POST' })
                 .then(response => {
                     if (response.ok) {
                         localStorage.removeItem('authToken');

@@ -1,7 +1,6 @@
 package kz.memigma.project.configs;
 
 import kz.memigma.project.services.JwtUtil;
-import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -92,7 +91,7 @@ public class SecurityConfig {
                         .logoutUrl("/logout")
                         .logoutSuccessUrl("/login?logout")
                 );
-        System.out.println("SecurityConfig загружен: public endpoints are set");
+        System.out.println("SecurityConfig uploaded: public endpoints are set");
 
         return http.build();
     }

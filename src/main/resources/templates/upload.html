@@ -416,8 +416,8 @@
 <footer class="fade-in" style="animation-delay: 0.4s;">
     <h2>Ready to Meme?</h2>
     <div class="footer-actions">
-        <button class="footer-btn" onclick="sendRequest('/api/contact')">Contact Us</button>
-        <button class="footer-btn" onclick="sendRequest('/api/subscribe')">Subscribe</button>
+        <button class="footer-btn" onclick="sendRequest('${API_BASE_URL}/api/contact')">Contact Us</button>
+        <button class="footer-btn" onclick="sendRequest('${API_BASE_URL}/api/subscribe')">Subscribe</button>
     </div>
     <div class="footer-contact">
         <p>Email: contact@memigma.tech</p>
@@ -431,6 +431,10 @@
 </footer>
 
 <script>
+    const API_BASE_URL = window.location.hostname === 'localhost'
+        ? 'http://localhost:8080'
+        : 'https://memigma-production.up.railway.app/';
+
     function parseJwt(token) {
         try {
             const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
@@ -451,7 +455,7 @@
             alert('Please log in');
             return;
         }
-        window.location.href = `/api/home?token=${encodeURIComponent(token)}`;
+        window.location.href = `${API_BASE_URL}/api/home?token=${encodeURIComponent(token)}`;
     });
 
 
@@ -530,7 +534,7 @@
     function logout() {
         localStorage.removeItem('authToken');
         localStorage.removeItem('username');
-        fetch('/api/logout', { method: 'POST' })
+        fetch('${API_BASE_URL}/api/logout', { method: 'POST' })
             .then(response => {
                 if (response.ok) {
                     window.location.href = '/index.html';
@@ -642,7 +646,7 @@
         formData.append('title', title);
 
         try {
-            const response = await fetch('/api/memes', {
+            const response = await fetch('${API_BASE_URL}/api/memes', {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`

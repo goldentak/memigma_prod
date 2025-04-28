@@ -408,6 +408,10 @@
     </footer>
 
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8080'
+            : 'https://memigma-production.up.railway.app/';
+
         const token = localStorage.getItem('authToken');
         if (!token) {
             window.location.href = '/login.html';
@@ -497,7 +501,7 @@
 
         async function fetchUserData() {
             try {
-                const { username, email } = await sendRequest('/api/user-profile');
+                const { username, email } = await sendRequest('${API_BASE_URL}/api/user-profile');
                 document.getElementById('username').textContent = username;
                 document.getElementById('email').textContent    = email;
             } catch (err) {
@@ -509,7 +513,7 @@
 
         async function fetchLikedMemes() {
             try {
-                const data = await sendRequest('/api/liked-memes', 'GET');
+                const data = await sendRequest('${API_BASE_URL}/api/liked-memes', 'GET');
                 const grid = document.getElementById('liked-memes-grid');
                 grid.innerHTML = '';
 
@@ -531,7 +535,7 @@
         }
 
         function logout() {
-            fetch('/api/logout', { method: 'POST' })
+            fetch('${API_BASE_URL}/api/logout', { method: 'POST' })
                 .then(() => {
                     localStorage.removeItem('authToken');
                     window.location.href = '/login.html';

@@ -418,8 +418,8 @@
     <footer class="fade-in" style="animation-delay: 1s;">
         <h2>Ready to Meme?</h2>
         <div class="footer-actions">
-            <button class="footer-btn" onclick="sendRequest('/api/contact')">CONTACT US</button>
-            <button class="footer-btn" onclick="sendRequest('/api/subscribe')">SUBSCRIBE</button>
+            <button class="footer-btn" onclick="sendRequest('${API_BASE_URL} \n/api/contact')">CONTACT US</button>
+            <button class="footer-btn" onclick="sendRequest('${API_BASE_URL} \n/api/subscribe')">SUBSCRIBE</button>
         </div>
         <div class="footer-contact">
             <p>Email: contact@memigma.tech</p>
@@ -432,6 +432,10 @@
         </div>
     </footer>
     <script>
+        const API_BASE_URL = window.location.hostname === 'localhost'
+            ? 'http://localhost:8080'
+            : 'https://memigma-production.up.railway.app';
+
         function navigateToAuth() {
             fetch('/auth/login', {
                 method: 'GET',
