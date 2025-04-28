@@ -501,7 +501,7 @@
 
         async function fetchUserData() {
             try {
-                const { username, email } = await sendRequest('${API_BASE_URL}/api/user-profile');
+                const { username, email } = await sendRequest('/api/user-profile');
                 document.getElementById('username').textContent = username;
                 document.getElementById('email').textContent    = email;
             } catch (err) {
@@ -513,7 +513,7 @@
 
         async function fetchLikedMemes() {
             try {
-                const data = await sendRequest('${API_BASE_URL}/api/liked-memes', 'GET');
+                const data = await sendRequest('/api/liked-memes', 'GET');
                 const grid = document.getElementById('liked-memes-grid');
                 grid.innerHTML = '';
 
@@ -535,7 +535,7 @@
         }
 
         function logout() {
-            fetch('${API_BASE_URL}/api/logout', { method: 'POST' })
+            fetch('/api/logout', { method: 'POST' })
                 .then(() => {
                     localStorage.removeItem('authToken');
                     window.location.href = '/login.html';
